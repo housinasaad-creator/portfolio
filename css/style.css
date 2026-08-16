@@ -44,19 +44,41 @@ body.robot-ready #robot-container{opacity:1;transform:none}
 .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(120% 100% at 50% 45%,transparent 58%,rgba(4,6,11,.6) 100%);}
 
-/* ===== هيدر علوي زجاجي ثابت + إبراز الصفحة الحالية ===== */
-#topnav{position:fixed;top:0;left:0;right:0;z-index:9;
-  display:flex;flex-direction:row-reverse;flex-wrap:wrap;justify-content:center;align-items:center;gap:5px;
-  padding:9px 14px;
-  background:rgba(12,16,24,.55);backdrop-filter:blur(16px) saturate(1.2);
+/* ===== هيدر علوي زجاجي ثابت: لوغو يسار · صفحات بالنص · تواصل يمين ===== */
+#topnav{position:fixed;top:0;left:0;right:0;z-index:9;direction:ltr;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:8px 18px;
+  background:rgba(12,16,24,.6);backdrop-filter:blur(16px) saturate(1.2);
   -webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line)}
+/* اللوغو بالهيدر */
+.nav-brand{flex:none;background:none;border:0;padding:0;line-height:0;cursor:none;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.nav-brand svg{width:42px;height:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.nav-brand svg path{transition:stroke .5s ease}
+.nav-brand:hover{transform:translateY(-2px) scale(1.08)}
+/* روابط الصفحات */
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:5px;flex:1 1 auto}
 .navlink{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
   background:none;border:1px solid transparent;border-radius:9px;padding:6px 12px;cursor:none;
   white-space:nowrap;transition:color .25s,background .25s,border-color .25s,transform .2s,box-shadow .3s}
 .navlink:hover{color:var(--text);transform:translateY(-2px) scale(1.05)}
 .navlink.on{color:#05060f;background:var(--accent);border-color:var(--accent);font-weight:700;
   box-shadow:0 4px 18px -3px var(--accent)}
-@media (max-width:640px){ #topnav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start} }
+/* أيقونات التواصل بالهيدر */
+.nav-contact{flex:none;display:flex;align-items:center;gap:8px}
+.nav-ico{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;cursor:none;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s}
+.nav-ico i{width:17px;height:17px;display:block;background:var(--accent);
+  -webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat;transition:background .5s ease}
+.nav-ico:hover{transform:translateY(-2px) scale(1.1);border-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:768px){
+  #topnav{gap:8px;padding:7px 10px}
+  .nav-brand svg{width:32px}
+  .nav-links{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start}
+  .nav-ico{width:30px;height:30px}
+  .nav-ico i{width:15px;height:15px}
+}
 
 /* لوغو شخصي كبير + الاسم بجنبه، فوق عنوان كل صفحة (يُحقن بـ nav.js) — يتلوّن مع الصفحة */
 .page-brand{display:flex;align-items:center;gap:16px;margin:0 0 20px;direction:ltr;

@@ -47,17 +47,46 @@
   // ألوان متباعدة — كل صفحتين متتاليتين مختلفتين بوضوح (تبديل دافئ/بارد)
   const ACCENT = ['#4d9fff','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa'];
 
-  // ===== هيدر علوي زجاجي ثابت — كل الصفحات + إبراز الصفحة الحالية (بلونها) =====
+  // روابط التواصل (تُستعمل بالهيدر) — يتلوّنوا مع الصفحة
+  const SOCIALS = [
+    ['whatsapp','https://wa.me/905050144543','WhatsApp'],
+    ['instagram','https://www.instagram.com/mjh.6_6','Instagram'],
+    ['facebook','https://www.facebook.com/share/1FGM8Z6WL1/','Facebook'],
+    ['github','https://github.com/housinasaad-creator','GitHub'],
+  ];
+
+  // ===== هيدر علوي زجاجي ثابت: لوغو يسار · صفحات بالنص · تواصل يمين =====
   const topnav = document.createElement('nav');
   topnav.id = 'topnav'; topnav.setAttribute('aria-label','التنقّل');
+
+  // اللوغو الأساسي بالهيدر (يرجّع للرئيسية، يتلوّن مع الصفحة)
+  const navBrand = document.createElement('button');
+  navBrand.className = 'nav-brand'; navBrand.title = 'Mohammed Al-Hussein'; navBrand.setAttribute('aria-label','الصفحة الرئيسية');
+  navBrand.innerHTML = '<svg viewBox="0 0 200 170" aria-hidden="true"><g fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path stroke="var(--accent)" d="M42,132 L42,44 L86,96 L130,44 L130,132"/>'
+    + '<path stroke="var(--accent-2)" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/></g></svg>';
+  navBrand.addEventListener('click', ()=> go(0));
+
+  // روابط الصفحات
+  const navLinksWrap = document.createElement('div');
+  navLinksWrap.className = 'nav-links';
   NAMES.forEach((nm,i)=>{
     const b = document.createElement('button');
     b.className = 'navlink'; b.textContent = nm; b.title = nm;
     b.addEventListener('click', ()=> go(i));
-    topnav.appendChild(b);
+    navLinksWrap.appendChild(b);
   });
+
+  // أيقونات التواصل
+  const navContact = document.createElement('div');
+  navContact.className = 'nav-contact';
+  navContact.innerHTML = SOCIALS.map(([slug,url,label])=>
+    `<a class="nav-ico" href="${url}" target="_blank" rel="noopener" title="${label}" aria-label="${label}"><i style="--i:url(https://cdn.simpleicons.org/${slug})"></i></a>`
+  ).join('');
+
+  topnav.append(navBrand, navLinksWrap, navContact);
   document.body.appendChild(topnav);
-  const navlinks = [...topnav.children];
+  const navlinks = [...navLinksWrap.children];
   function updateNav(){ navlinks.forEach((b,i)=> b.classList.toggle('on', i===cur)); }
   function hexRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
   function lighten(h,a){ const [r,g,b]=hexRgb(h),f=x=>Math.round(x+(255-x)*a); return `rgb(${f(r)},${f(g)},${f(b)})`; }
