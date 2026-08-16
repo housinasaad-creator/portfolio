@@ -1,6 +1,13 @@
 /* ===== الروبوت 3D (Three.js) + تتبّع الماوس بالراس + تفاعل بالضغط ===== */
-import * as THREE from 'three';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+/* موبايل: لا نحمّل الروبوت ولا مكتبة Three.js نهائياً (توفير كبير للأداء والبطارية) */
+if (window.matchMedia('(max-width: 768px)').matches) {
+  document.body.classList.add('no-robot');
+  window.robotAccent   = () => {};
+  window.robotPage     = () => {};
+  window.applyRobotCFG = () => {};
+} else {
+const THREE = await import('three');
+const { FBXLoader } = await import('three/addons/loaders/FBXLoader.js');
 
 const CFG = window.RobotCFG = {
   base:   'assets/robot/Waving.fbx',   // فيه جسم الروبوت + حركة التحية
@@ -190,3 +197,5 @@ window.robotPage = (i)=>{
 // للتجريب من الكونسول
 window.applyRobotCFG = ()=>{ if(model){ model.scale.setScalar(CFG.scale); model.position.set(CFG.modelX,CFG.modelY,0);} placeCamera(); };
 window.robotPlay = play;
+
+} // نهاية else (نفّذ الروبوت فقط على غير الموبايل)
