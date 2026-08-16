@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بورد الستايل الجديد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Sora:wght@600;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f17;          /* غامق هادي (مش أسود ميت) */
+    --panel:#121826;
+    --accent:#4d9fff;      /* لون واحد: أزرق كهربائي هادي */
+    --accent-soft:rgba(77,159,255,.14);
+    --text:#e6eaf2;
+    --muted:#8a94a8;
+    --line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);padding:40px 22px 80px;line-height:1.6}
+  .head{max-width:920px;margin:0 auto 30px;text-align:center}
+  .head h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(20px,4vw,30px)}
+  .head p{color:var(--muted);margin-top:8px;font-size:14px}
+  .wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px}
+  .box>.label{font-family:'JetBrains Mono';font-size:12px;color:var(--accent);letter-spacing:1px;margin-bottom:18px}
+
+  /* ===== نموذج صفحة لغة بالستايل الجديد ===== */
+  .demo{display:flex;gap:26px;align-items:flex-start}
+  .lang-logo{width:64px;height:64px;flex:none;border-radius:16px;background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+  .lang-logo img{width:38px;height:38px}
+  .kicker{font-family:'JetBrains Mono';color:var(--accent);font-size:13px;letter-spacing:1px}
+  .title-sg{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,7vw,64px);line-height:1;margin:6px 0 4px;direction:ltr}
+  .arname{color:var(--muted);font-size:15px;margin-bottom:16px}
+  .desc{color:#c4ccdb;max-width:520px;font-size:16px}
+  .level{margin-top:20px;max-width:360px}
+  .level .row{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:12px;color:var(--muted);margin-bottom:6px}
+  .bar{height:7px;border-radius:6px;background:rgba(255,255,255,.07);overflow:hidden}
+  .bar>i{display:block;height:100%;width:82%;background:linear-gradient(90deg,var(--accent),#7cc0ff);border-radius:6px}
+  .tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+  .tags span{font-family:'JetBrains Mono';font-size:12px;color:var(--muted);padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02)}
+
+  /* ===== مقارنة خطوط العنوان ===== */
+  .fonts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .fcard{background:#0e1420;border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center}
+  .fcard .n{font-family:'JetBrains Mono';font-size:12px;color:var(--accent);margin-bottom:14px}
+  .fs-sg{font-family:'Space Grotesk';font-weight:700}
+  .fs-sora{font-family:'Sora';font-weight:700}
+  .fbig{font-size:clamp(30px,5vw,46px);direction:ltr;line-height:1.1}
+  @media(max-width:620px){.demo{flex-direction:column}.fonts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>الستايل الجديد — أنظف، أهدأ، مصداقية أكثر</h1>
+    <p>لون واحد هادي بدل النيون · خط عصري للعنوان · خط مونو (JetBrains Mono) للتسميات والأكواد</p>
+  </div>
+
+  <div class="wrap">
+
+    <!-- نموذج صفحة لغة -->
+    <div class="box">
+      <div class="label">// نموذج صفحة لغة (Python)</div>
+      <div class="demo">
+        <div class="lang-logo"><img src="https://cdn.simpleicons.org/python/4d9fff" alt="Python"></div>
+        <div>
+          <div class="kicker">06 · بايثون</div>
+          <div class="title-sg">Python</div>
+          <div class="arname">الأتمتة والذكاء الصناعي</div>
+          <p class="desc">بستخدم بايثون لأتمتة الشغل الممل، ومعالجة البيانات، وبناء نماذج ذكاء صناعي. من سكربت صغير بيوفّر عليك ساعات، لنموذج بيتعلّم من الداتا ويتنبّأ.</p>
+          <div class="level">
+            <div class="row"><span>المستوى</span><span>متقدّم</span></div>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="tags"><span>Automation</span><span>Pandas</span><span>AI / ML</span><span>APIs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- مقارنة خطوط -->
+    <div class="box">
+      <div class="label">// اختار خط العنوان</div>
+      <div class="fonts">
+        <div class="fcard">
+          <div class="n">الخيار 1 — Space Grotesk</div>
+          <div class="fbig fs-sg">JavaScript</div>
+          <div class="fbig fs-sg">Python · Dart</div>
+        </div>
+        <div class="fcard">
+          <div class="n">الخيار 2 — Sora</div>
+          <div class="fbig fs-sora">JavaScript</div>
+          <div class="fbig fs-sora">Python · Dart</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

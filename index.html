@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mohammed Al-Hussein — مبرمج ومهندس ذكاء صناعي</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=9">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+  <div id="robot-container"><div class="robot-glow"></div></div>
+  <div class="vignette"></div>
+
+  <main id="pages">
+
+    <!-- 1 · الرئيسية -->
+    <section class="page">
+      <div class="panel">
+        <svg class="home-logo" viewBox="0 0 200 170" aria-label="Mohammed Al-Hussein">
+          <g fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="var(--accent)"   d="M42,132 L42,44 L86,96 L130,44 L130,132"/>
+            <path stroke="var(--accent-2)" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/>
+          </g>
+        </svg>
+        <div class="home-name">Mohammed<br>Al-Hussein</div>
+        <div class="home-role">&lt; مبرمج ومهندس ذكاء صناعي /&gt;</div>
+        <p class="home-bio">من ٦ سنين عم برمج. ببني مواقع وتطبيقات وأنظمة ذكية — من الواجهة اللي بتشوفها، للسيرفر ورا الكواليس، لنماذج الذكاء الصناعي. تحت معك ١٢ محطة، كل وحدة بتحكي عن شي بعرفه منيح.</p>
+        <div class="stats">
+          <span><b data-count="6" data-prefix="+">+٦</b> سنين خبرة</span>
+          <span>تطوير ويب</span>
+          <span>تطبيقات Flutter</span>
+          <span>ذكاء صناعي</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · HTML -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/html5)" role="img" aria-label="HTML"></i></div>
+          <div><span class="kicker">02 · إتش تي إم إل</span><h2 class="page-title">HTML</h2></div>
+        </div>
+        <div class="arname">هيكل أي موقع</div>
+        <p class="page-desc">البنية اللي بينبني عليها أي موقع. بكتب HTML نظيف ومرتّب، دلالي (semantic)، وبراعي إنه يفتح صح على أي جهاز، ويكون سهل لمحرّكات البحث ولذوي الاحتياجات.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Semantic</span><span>Accessibility</span><span>SEO</span></div>
+      </div>
+    </section>
+
+    <!-- 3 · CSS -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/css)" role="img" aria-label="CSS"></i></div>
+          <div><span class="kicker">03 · سي إس إس</span><h2 class="page-title">CSS</h2></div>
+        </div>
+        <div class="arname">هون بصير حلو</div>
+        <p class="page-desc">هون بصير الموقع حلو ومرتّب. بشتغل تصاميم عصرية، حركات ناعمة، وترتيب بيزبط على الموبايل والكمبيوتر — متل هالموقع اللي قدامك هلق.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Flexbox</span><span>Grid</span><span>Animations</span><span>Responsive</span></div>
+      </div>
+    </section>
+
+    <!-- 4 · JavaScript -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/javascript)" role="img" aria-label="JavaScript"></i></div>
+          <div><span class="kicker">04 · جافا سكربت</span><h2 class="page-title">JavaScript</h2></div>
+        </div>
+        <div class="arname">اللي بيخلي الصفحة تتفاعل</div>
+        <p class="page-desc">اللي بيعطي الصفحة حياة وتفاعل. بكتب منطق ديناميكي، بربط مع APIs، وبعمل تجارب سلسة بتشتغل بدون ما تعلّق. هالروبوت والتنقّل اللي عم تستعمله كله جافا سكربت.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>ES6+</span><span>DOM</span><span>Async</span><span>APIs</span></div>
+      </div>
+    </section>
+
+    <!-- 5 · Dart -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/dart)" role="img" aria-label="Dart"></i></div>
+          <div><span class="kicker">05 · دارت</span><h2 class="page-title">Dart</h2></div>
+        </div>
+        <div class="arname">تطبيقات موبايل وديسكتوب</div>
+        <p class="page-desc">لغتي لبناء التطبيقات مع Flutter. عملت فيها تطبيقات حقيقية شغّالة — متل CyberLearn لتعليم الأمن السيبراني على الديسكتوب، وتطبيق أندرويد لفحص تحمّل أجهزة الشبكة.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Flutter</span><span>Mobile</span><span>Desktop</span><span>UI</span></div>
+      </div>
+    </section>
+
+    <!-- 6 · Three.js -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/threedotjs)" role="img" aria-label="Three.js"></i></div>
+          <div><span class="kicker">06 · ثري جي إس</span><h2 class="page-title">Three.js</h2></div>
+        </div>
+        <div class="arname">ثلاثي الأبعاد بالمتصفح</div>
+        <p class="page-desc">عوالم ثلاثية الأبعاد جوّا المتصفح. الروبوت اللي عم يتطلّع فيك هلق مبني فيها، وكمان عملت عارضات ثلاثية الأبعاد تفاعلية لعلب وتصاميم موزاييك.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>WebGL</span><span>GLTF/FBX</span><span>Interaction</span></div>
+      </div>
+    </section>
+
+    <!-- 7 · Python -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/python)" role="img" aria-label="Python"></i></div>
+          <div><span class="kicker">07 · بايثون</span><h2 class="page-title">Python</h2></div>
+        </div>
+        <div class="arname">الأتمتة والذكاء الصناعي</div>
+        <p class="page-desc">بستخدم بايثون لأتمتة الشغل الممل، ومعالجة الداتا، وبناء نماذج الذكاء الصناعي. من سكربت صغير بيوفّرلك ساعات، لنموذج بيتعلّم من الداتا ويتنبّأ.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Automation</span><span>Pandas</span><span>AI / ML</span><span>APIs</span></div>
+      </div>
+    </section>
+
+    <!-- 8 · PHP -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/php)" role="img" aria-label="PHP"></i></div>
+          <div><span class="kicker">08 · بي إتش بي</span><h2 class="page-title">PHP</h2></div>
+        </div>
+        <div class="arname">الشغل ورا الكواليس</div>
+        <p class="page-desc">الشغل ورا الكواليس. ببني سيرفرات وأنظمة إدارة محتوى ومستخدمين، وبربطها بقواعد بيانات بشكل آمن ومنظّم.</p>
+        <div class="level lvl-2"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Backend</span><span>MySQL</span><span>APIs</span></div>
+      </div>
+    </section>
+
+    <!-- 9 · C -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/c)" role="img" aria-label="C"></i></div>
+          <div><span class="kicker">09 · سي</span><h2 class="page-title">C</h2></div>
+        </div>
+        <div class="arname">الأساس والأداء</div>
+        <p class="page-desc">الأساس اللي بيخليك تفهم كيف بتشتغل الأشياء من الجذر. برمجة قريبة من العتاد، سريعة وفعّالة، وبتعلّمك تحترم كل بايت بالذاكرة.</p>
+        <div class="level lvl-2"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Performance</span><span>Memory</span><span>Low-level</span></div>
+      </div>
+    </section>
+
+    <!-- 10 · AI Engineering -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/tensorflow)" role="img" aria-label="AI"></i></div>
+          <div><span class="kicker">10 · هندسة الذكاء الصناعي</span><h2 class="page-title">AI Engineering</h2></div>
+        </div>
+        <div class="arname">من الفكرة لحل شغّال</div>
+        <p class="page-desc">بناء أنظمة ذكاء صناعي شغّالة فعلياً — مش بس تجارب. آخد الفكرة وأركّبها كحل مدمج بموقع أو تطبيق بيستفيد منه الناس على أرض الواقع.</p>
+        <div class="level lvl-3"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>LLMs</span><span>Integration</span><span>Pipelines</span><span>APIs</span></div>
+      </div>
+    </section>
+
+    <!-- 11 · AI Training -->
+    <section class="page">
+      <div class="panel">
+        <div class="lang-head">
+          <div class="lang-logo"><i class="lang-icon" style="--i:url(https://cdn.simpleicons.org/pytorch)" role="img" aria-label="AI Training"></i></div>
+          <div><span class="kicker">11 · تدريب النماذج</span><h2 class="page-title">AI Training</h2></div>
+        </div>
+        <div class="arname">من الداتا لذكاء</div>
+        <p class="page-desc">تجهيز الداتا، تدريب النماذج، وضبطها (fine-tuning) لتطلع بأحسن أداء ممكن. هاد الجزء اللي بيحوّل أرقام وداتا خام لذكاء فعلي.</p>
+        <div class="level lvl-2"><div class="segs"><i></i><i></i><i></i></div><div class="labels"><span>مبتدئ</span><span>متوسط</span><span>متقدّم</span></div></div>
+        <div class="tags"><span>Datasets</span><span>Training</span><span>Fine-tuning</span><span>Eval</span></div>
+      </div>
+    </section>
+
+    <!-- 12 · Projects -->
+    <section class="page">
+      <div class="panel">
+        <span class="kicker">12 · شغلي</span>
+        <h2 class="page-title">Projects</h2>
+        <div class="projects">
+          <div class="proj"><div><div class="pt">موقع Mozaik</div><div class="pd">موقع شركة أوفست وتغليف — تصميم غامق فخم + عرض ثلاثي الأبعاد للعلب + ٣ لغات.</div></div><span class="pill">Web · 3D</span></div>
+          <div class="proj"><div><div class="pt">عارضات علب 3D</div><div class="pd">مجموعة عارضات Three.js تفاعلية لعلب وتصاميم كرتون بمعيار موحّد.</div></div><span class="pill">Three.js</span></div>
+          <div class="proj"><div><div class="pt">النسيج الذهبي — ERP</div><div class="pd">نظام إدارة موارد لشركة نسيج مع تقارير PDF.</div></div><span class="pill">System</span></div>
+          <div class="proj"><div><div class="pt">CyberLearn</div><div class="pd">تطبيق ديسكتوب لتعليم الأمن السيبراني (Flutter / Dart).</div></div><span class="pill">Dart</span></div>
+          <div class="proj"><div><div class="pt">Network Load Tester</div><div class="pd">تطبيق أندرويد لاختبار تحمّل أجهزة الشبكة عبر الـ IP.</div></div><span class="pill">Dart</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 · Contact -->
+    <section class="page">
+      <div class="panel">
+        <span class="kicker">13 · تواصل</span>
+        <h2 class="page-title">Contact</h2>
+        <div class="arname">جاهز نشتغل سوا؟</div>
+        <p class="page-desc">إذا عندك فكرة أو مشروع، أو بس بدك تحكي — راسلني وبكون سعيد نشتغل سوا.</p>
+        <div class="contact-links">
+          <a class="contact-btn" href="mailto:housin.asaad@gmail.com">✉ راسلني</a>
+          <a class="contact-alt" href="mailto:housin.asaad@gmail.com">housin.asaad@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- مؤشّر السكرول -->
+  <div class="scroll-hint">مرّر للاستكشاف<span class="arrow">›</span></div>
+
+  <!-- المؤشّر المخصّص -->
+  <div id="cring"></div>
+  <div id="cdot"></div>
+
+  <script src="js/background.js?v=9"></script>
+  <script src="js/cursor.js?v=9"></script>
+  <script src="js/fx.js?v=9"></script>
+  <script src="js/nav.js?v=9"></script>
+  <script type="module" src="js/robot.js?v=9"></script>
+</body>
+</html>

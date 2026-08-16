@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>معاينة خطوط العنوان (إنجليزي)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lobster&family=Kaushan+Script&family=Monoton&family=Audiowide&family=Orbitron:wght@700&family=Bungee&family=Bagel+Fat+One&family=Rubik+Wet+Paint&family=Righteous&family=Cairo:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070912; --bg2:#0d1024;
+    --neon:#00eaff; --neon2:#b026ff; --neon3:#ff2bd6;
+    --text:#e8ecff; --muted:#7b83b0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Cairo',sans-serif;
+    background:radial-gradient(1200px 800px at 50% -10%, var(--bg2), var(--bg));
+    color:var(--text); min-height:100vh; padding:44px 20px 80px; overflow-x:hidden;
+  }
+  .head{text-align:center;margin-bottom:40px}
+  .head h1{font-weight:600;font-size:clamp(20px,4vw,30px);color:var(--muted)}
+  .head p{color:var(--muted);margin-top:10px;font-size:15px}
+
+  /* الستايل النهائي: ثابت + توهّج يتنفّس + ظهور */
+  .hero{max-width:1000px;margin:0 auto 56px;border:1px dashed rgba(0,234,255,.3);
+    border-radius:22px;padding:50px 20px;text-align:center;background:rgba(0,234,255,.03)}
+  .hero .lbl{font-size:13px;color:var(--muted);margin-bottom:24px}
+  .hero-title{
+    font-family:'Pacifico',cursive; direction:ltr;
+    font-size:clamp(34px,7vw,76px); color:#fff; display:inline-block;
+    animation:appear 1s ease-out both, breathe 3.6s ease-in-out 1s infinite;
+  }
+  @keyframes appear{0%{opacity:0;transform:translateY(24px) scale(.94);filter:blur(6px)}100%{opacity:1;transform:none;filter:blur(0)}}
+  @keyframes breathe{
+    0%,100%{text-shadow:0 0 6px var(--neon),0 0 16px rgba(0,234,255,.45)}
+    50%{text-shadow:0 0 12px var(--neon),0 0 30px rgba(0,234,255,.7),0 0 52px rgba(176,38,255,.5)}
+  }
+
+  .grid{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  .card{background:linear-gradient(160deg,rgba(255,255,255,.035),rgba(255,255,255,.01));
+    border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:34px 26px;
+    position:relative;overflow:hidden;transition:transform .35s,border-color .35s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(0,234,255,.4)}
+  .card .tag{position:absolute;top:14px;right:16px;font-size:12px;color:var(--muted);
+    border:1px solid rgba(255,255,255,.12);padding:3px 10px;border-radius:20px}
+  .card .note{font-size:13px;color:var(--muted);margin-top:14px;text-align:right}
+  .sample{direction:ltr;display:block;text-align:center;color:#fff;
+    font-size:clamp(30px,6vw,60px);line-height:1.3;
+    text-shadow:0 0 8px var(--neon),0 0 22px rgba(0,234,255,.5),0 0 44px rgba(176,38,255,.35)}
+
+  .f-pacifico{font-family:'Pacifico',cursive}
+  .f-lobster{font-family:'Lobster',cursive}
+  .f-kaushan{font-family:'Kaushan Script',cursive}
+  .f-monoton{font-family:'Monoton',cursive}
+  .f-audiowide{font-family:'Audiowide',sans-serif}
+  .f-orbitron{font-family:'Orbitron',sans-serif}
+  .f-bungee{font-family:'Bungee',cursive}
+  .f-bagel{font-family:'Bagel Fat One',cursive}
+  .f-wetpaint{font-family:'Rubik Wet Paint',cursive}
+  .f-righteous{font-family:'Righteous',cursive}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>خطوط العنوان (إنجليزي) — اختار اللي بيبهرك</h1>
+    <p>العنوان إنجليزي · المحتوى عربي · خلفية غامقة + نيون · كلها مجانية</p>
+  </div>
+
+  <div class="hero">
+    <div class="lbl">↓ الستايل النهائي المقترح للعنوان (ثابت + توهّج يتنفّس)</div>
+    <div class="hero-title">Mohammed Al-Hussein</div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card"><span class="tag">Pacifico — ملتفّ محبوب 🌀</span>
+      <span class="sample f-pacifico">Mohammed Al-Hussein</span>
+      <div class="note">منحنيات كثيرة، محبوب ودّي مش رسمي أبداً — أقرب شي لطلبك «ملتف وكيرلي».</div></div>
+
+    <div class="card"><span class="tag">Lobster — سكربت عريض</span>
+      <span class="sample f-lobster">Mohammed Al-Hussein</span>
+      <div class="note">سكربت جريء بمنحنيات، محبوب وواضح — قوي كلوغو.</div></div>
+
+    <div class="card"><span class="tag">Kaushan Script — فرشاة مائلة</span>
+      <span class="sample f-kaushan">Mohammed Al-Hussein</span>
+      <div class="note">إحساس فرشاة يدوي فني، ملتف وحيوي.</div></div>
+
+    <div class="card"><span class="tag">Monoton — نيون أنابيب 💡</span>
+      <span class="sample f-monoton">Mohammed</span>
+      <div class="note">حروف زي أنابيب النيون — بيمشي مثالي مع خلفيتك المضيئة، فريد جداً.</div></div>
+
+    <div class="card"><span class="tag">Audiowide — تقني مستقبلي 🤖</span>
+      <span class="sample f-audiowide">Mohammed Al-Hussein</span>
+      <div class="note">إحساس sci-fi/روبوت — بيحكي «ذكاء صناعي» من أول نظرة.</div></div>
+
+    <div class="card"><span class="tag">Orbitron — فضائي هندسي</span>
+      <span class="sample f-orbitron">Mohammed</span>
+      <div class="note">هندسي مستقبلي، تقني وقوي — مناسب لمبرمج AI.</div></div>
+
+    <div class="card"><span class="tag">Bungee — حضري عريض</span>
+      <span class="sample f-bungee">Mohammed</span>
+      <div class="note">عريض قوي بستايل شوارع — جريء ومبهر.</div></div>
+
+    <div class="card"><span class="tag">Bagel Fat One — سمين مرح 🤪</span>
+      <span class="sample f-bagel">Mohammed</span>
+      <div class="note">سميك مدوّر ومرح جداً — محبوب ولطيف، يمشي حلو مع الروبوت.</div></div>
+
+    <div class="card"><span class="tag">Rubik Wet Paint — دهان سايل 🎨</span>
+      <span class="sample f-wetpaint">Mohammed</span>
+      <div class="note">شكل دهان بيقطر — مجنون وفريد، مستحيل تلاقيه بمواقع تانية.</div></div>
+
+    <div class="card"><span class="tag">Righteous — نظيف عصري</span>
+      <span class="sample f-righteous">Mohammed Al-Hussein</span>
+      <div class="note">هندسي نظيف عصري — لو حبيت شي أهدأ شوي بس لسا مميز.</div></div>
+
+  </div>
+</body>
+</html>

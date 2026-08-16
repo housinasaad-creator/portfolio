@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خلفيات حيّة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&family=Kaushan+Script&display=swap" rel="stylesheet">
+<style>
+  :root{--neon:#00eaff;--neon2:#b026ff;--neon3:#ff2bd6;--muted:#7b83b0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Cairo',sans-serif;background:#05060f;color:#e8ecff;overflow:hidden}
+  #bg{position:fixed;inset:0;z-index:0;display:block}
+  .overlay{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;padding:20px}
+  .demo-title{font-family:'Kaushan Script',cursive;direction:ltr;font-size:clamp(34px,7vw,72px);color:#fff;text-shadow:0 0 10px var(--neon),0 0 30px rgba(0,234,255,.6)}
+  .demo-sub{color:var(--muted);margin-top:12px;font-size:15px}
+  .glass{margin-top:26px;padding:22px 30px;border-radius:20px;background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);max-width:420px}
+  .switch{position:fixed;z-index:3;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(10,12,26,.7);backdrop-filter:blur(8px);padding:8px;border-radius:16px;border:1px solid rgba(255,255,255,.1)}
+  .switch button{font-family:'Cairo';font-weight:700;font-size:13px;color:#cdd3ff;background:transparent;border:0;padding:9px 14px;border-radius:11px;cursor:pointer;transition:.25s}
+  .switch button.active{background:linear-gradient(120deg,var(--neon),var(--neon2));color:#05060f}
+</style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="switch">
+    <button data-m="neural" class="active">🧠 شبكة عصبية</button>
+    <button data-m="circuit">⚡ دارات نبضات</button>
+    <button data-m="grid">🌆 شبكة منظور</button>
+  </div>
+
+  <div class="overlay">
+    <div class="demo-title">Mohammed Al-Hussein</div>
+    <div class="demo-sub">هيك رح تبيّن البطاقة الزجاجية فوق الخلفية الحيّة</div>
+    <div class="glass">جرّب بدّل الخلفية من فوق · حرّك الماوس لتشوف التفاعل</div>
+  </div>
+
+<script>
+const cv=document.getElementById('bg'),ctx=cv.getContext('2d');
+let W,H,DPR;function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';init();}
+addEventListener('resize',size);
+const mouse={x:-9999,y:-9999};
+addEventListener('mousemove',e=>{mouse.x=e.clientX*DPR;mouse.y=e.clientY*DPR;});
+
+let mode='neural',t=0;
+let nodes=[],pulses=[];
+function init(){
+  // شبكة عصبية
+  nodes=[];const n=Math.round((innerWidth*innerHeight)/16000);
+  for(let i=0;i<n;i++)nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35*DPR,vy:(Math.random()-.5)*.35*DPR});
+  // دارات: نبضات على خطوط شبكة
+  pulses=[];const step=90*DPR;
+  for(let i=0;i<40;i++){const horiz=Math.random()<.5;pulses.push({horiz,line:Math.round((Math.random()* (horiz?H:W))/step)*step,p:Math.random(),sp:(.002+Math.random()*.004)});}
+  window._step=step;
+}
+function neural(){
+  ctx.clearRect(0,0,W,H);
+  const D=140*DPR;
+  for(const a of nodes){a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
+    const dx=a.x-mouse.x,dy=a.y-mouse.y,md=Math.hypot(dx,dy);if(md<180*DPR&&md>0){a.x+=dx/md*.6;a.y+=dy/md*.6;}}
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<D){ctx.strokeStyle='rgba(0,234,255,'+(1-d/D)*.5+')';ctx.lineWidth=1*DPR;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+  for(const a of nodes){ctx.beginPath();ctx.arc(a.x,a.y,2*DPR,0,7);ctx.fillStyle='#00eaff';ctx.shadowBlur=10*DPR;ctx.shadowColor='#00eaff';ctx.fill();}
+  ctx.shadowBlur=0;
+}
+function circuit(){
+  ctx.fillStyle='rgba(5,6,15,.28)';ctx.fillRect(0,0,W,H);
+  const step=window._step;ctx.strokeStyle='rgba(120,140,255,.06)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  for(const p of pulses){p.p+=p.sp;if(p.p>1)p.p=0;
+    const x=p.horiz?p.p*W:p.line,y=p.horiz?p.line:p.p*H;
+    ctx.beginPath();ctx.arc(x,y,3*DPR,0,7);ctx.fillStyle='#ff2bd6';ctx.shadowBlur=16*DPR;ctx.shadowColor='#ff2bd6';ctx.fill();}
+  ctx.shadowBlur=0;
+}
+function grid(){
+  ctx.fillStyle='#05060f';ctx.fillRect(0,0,W,H);
+  const hz=H*0.42,vx=W/2,off=(t*1.2*DPR)% (60*DPR);
+  ctx.strokeStyle='rgba(255,43,214,.5)';ctx.lineWidth=1.2*DPR;
+  // خطوط أفقية متقاربة بالمنظور
+  for(let i=0;i<26;i++){const yy=hz+Math.pow(i/25,2)*(H-hz)+off*(i/25);if(yy>H)continue;const a=(yy-hz)/(H-hz);ctx.globalAlpha=a;ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke();}
+  ctx.globalAlpha=1;
+  // خطوط عمودية تتلاقى للأفق
+  ctx.strokeStyle='rgba(0,234,255,.45)';
+  for(let i=-12;i<=12;i++){ctx.beginPath();ctx.moveTo(vx+i*70*DPR,H);ctx.lineTo(vx+i*10*DPR,hz);ctx.stroke();}
+  // توهّج الأفق
+  const g=ctx.createLinearGradient(0,hz-60*DPR,0,hz);g.addColorStop(0,'rgba(176,38,255,0)');g.addColorStop(1,'rgba(176,38,255,.25)');ctx.fillStyle=g;ctx.fillRect(0,hz-60*DPR,W,60*DPR);
+}
+function loop(){t++;if(mode==='neural')neural();else if(mode==='circuit')circuit();else grid();requestAnimationFrame(loop);}
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');mode=b.dataset.m;});
+size();loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شكل الماوس</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&family=Kaushan+Script&display=swap" rel="stylesheet">
+<style>
+  :root{--neon:#00eaff;--neon2:#b026ff;--neon3:#ff2bd6;--muted:#7b83b0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Cairo',sans-serif;background:radial-gradient(1200px 800px at 50% -10%,#0d1024,#070912);color:#e8ecff;min-height:100vh;cursor:none;overflow-x:hidden}
+  @media (hover:none){body{cursor:auto}} /* للموبايل نرجّع العادي */
+  .switch{position:fixed;z-index:50;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(10,12,26,.7);backdrop-filter:blur(8px);padding:8px;border-radius:16px;border:1px solid rgba(255,255,255,.1)}
+  .switch button{font-family:'Cairo';font-weight:700;font-size:13px;color:#cdd3ff;background:transparent;border:0;padding:9px 14px;border-radius:11px;cursor:none;transition:.25s}
+  .switch button.active{background:linear-gradient(120deg,var(--neon),var(--neon2));color:#05060f}
+  .wrap{max-width:820px;margin:0 auto;padding:120px 20px 80px;text-align:center}
+  .title{font-family:'Kaushan Script',cursive;direction:ltr;font-size:clamp(30px,6vw,58px);color:#fff;text-shadow:0 0 10px var(--neon),0 0 30px rgba(0,234,255,.6)}
+  .hint{color:var(--muted);margin:14px 0 40px}
+  .targets{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+  .t{cursor:none}
+  .btn{background:linear-gradient(120deg,var(--neon),var(--neon2));color:#05060f;font-weight:700;border:0;padding:16px 28px;border-radius:14px;font-size:16px}
+  .cardg{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:28px 32px;min-width:200px}
+
+  /* المؤشّرات المخصّصة */
+  #cdot,#cring{position:fixed;top:0;left:0;pointer-events:none;z-index:60;transform:translate(-50%,-50%)}
+  /* وضع النقطة+الحلقة */
+  .m-dot #cdot{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 12px var(--neon)}
+  .m-dot #cring{width:38px;height:38px;border-radius:50%;border:2px solid rgba(0,234,255,.7);box-shadow:0 0 14px rgba(0,234,255,.4);transition:width .2s,height .2s,background .2s}
+  .m-dot.hovering #cring{width:64px;height:64px;background:rgba(0,234,255,.12)}
+  /* وضع الترمينال */
+  .m-term #cdot{width:11px;height:22px;border-radius:2px;background:var(--neon);box-shadow:0 0 14px var(--neon);animation:blink 1.05s steps(1) infinite}
+  .m-term #cring{display:none}
+  .m-term.hovering #cdot{background:var(--neon3);box-shadow:0 0 16px var(--neon3)}
+  @keyframes blink{50%{opacity:.15}}
+  /* وضع الرِتيكل */
+  .m-ret #cdot{width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 8px var(--neon)}
+  .m-ret #cring{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(0,234,255,.8);box-shadow:0 0 12px rgba(0,234,255,.4);transition:.2s}
+  .m-ret #cring::before,.m-ret #cring::after{content:'';position:absolute;background:rgba(0,234,255,.8)}
+  .m-ret #cring::before{left:50%;top:-10px;width:1.5px;height:60px;transform:translateX(-50%)}
+  .m-ret #cring::after{top:50%;left:-10px;height:1.5px;width:60px;transform:translateY(-50%)}
+  .m-ret.hovering #cring{width:58px;height:58px;transform:translate(-50%,-50%) rotate(45deg)}
+</style>
+</head>
+<body class="m-dot">
+  <div class="switch">
+    <button data-m="m-dot" class="active">🔵 نقطة + حلقة</button>
+    <button data-m="m-term">▮ ترمينال</button>
+    <button data-m="m-ret">✛ رِتيكل</button>
+  </div>
+
+  <div class="wrap">
+    <div class="title">Mohammed Al-Hussein</div>
+    <div class="hint">حرّك الماوس · ومرّ فوق الزر والبطاقة لتشوف المؤشّر يتفاعل</div>
+    <div class="targets">
+      <button class="btn t">جرّب الأزرار</button>
+      <div class="cardg t">بطاقة زجاجية<br>مرّ فوقي</div>
+      <button class="btn t">تواصل معي</button>
+    </div>
+  </div>
+
+  <div id="cring"></div>
+  <div id="cdot"></div>
+
+<script>
+const dot=document.getElementById('cdot'),ring=document.getElementById('cring'),body=document.body;
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);}loop();
+document.querySelectorAll('.t').forEach(el=>{el.addEventListener('mouseenter',()=>body.classList.add('hovering'));el.addEventListener('mouseleave',()=>body.classList.remove('hovering'));});
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  body.classList.remove('m-dot','m-term','m-ret');body.classList.add(b.dataset.m);});
+</script>
+</body>
+</html>

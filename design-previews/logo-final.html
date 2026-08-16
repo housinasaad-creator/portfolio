@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اللوغو النهائي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Cairo:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#070912;--bg2:#0d1024;--neon:#00eaff;--neon3:#ff2bd6;--muted:#7b83b0;--text:#e8ecff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Cairo',sans-serif;background:radial-gradient(1200px 800px at 50% -10%,var(--bg2),var(--bg));color:var(--text);min-height:100vh;padding:40px 20px 80px}
+  .head{text-align:center;margin-bottom:36px}
+  .head h1{font-weight:600;font-size:clamp(19px,4vw,26px);color:var(--muted)}
+  .wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+  .card{background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:40px 24px;text-align:center}
+  .card .lbl{font-size:13px;color:var(--muted);margin-bottom:22px}
+  svg{overflow:visible}
+  .mono path{mix-blend-mode:screen}
+  .m-stroke{filter:drop-shadow(0 0 5px var(--neon)) drop-shadow(0 0 16px rgba(0,234,255,.65))}
+  .h-stroke{filter:drop-shadow(0 0 5px var(--neon3)) drop-shadow(0 0 16px rgba(255,43,214,.6))}
+  .breathe{animation:breathe 3.6s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:.92;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
+  /* اللوكاب: لوغو + اسم */
+  .lockup{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
+  .name{font-family:'Kaushan Script',cursive;direction:ltr;font-size:clamp(30px,6vw,58px);color:#fff;
+    text-shadow:0 0 8px var(--neon),0 0 26px rgba(0,234,255,.55)}
+  .divider{width:2px;height:56px;background:linear-gradient(var(--neon),var(--neon3));border-radius:2px;opacity:.5}
+</style>
+</head>
+<body>
+  <div class="head"><h1>اللوغو النهائي — مونوغرام M · H متشابك</h1></div>
+
+  <div class="wrap">
+
+    <div class="card">
+      <div class="lbl">↓ اللوغو لحاله (أيقونة)</div>
+      <svg class="mono breathe" width="200" height="170" viewBox="0 0 200 170">
+        <g fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+          <!-- M سيان -->
+          <path class="m-stroke" stroke="#00eaff" d="M42,132 L42,44 L86,96 L130,44 L130,132"/>
+          <!-- H ماجنتا (متداخل مع رجل M اليمين) -->
+          <path class="h-stroke" stroke="#ff2bd6" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="card">
+      <div class="lbl">↓ اللوكاب الكامل (لوغو + الاسم) — متل ما رح يظهر بالموقع</div>
+      <div class="lockup">
+        <svg class="mono" width="120" height="105" viewBox="0 0 200 170">
+          <g fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+            <path class="m-stroke" stroke="#00eaff" d="M42,132 L42,44 L86,96 L130,44 L130,132"/>
+            <path class="h-stroke" stroke="#ff2bd6" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/>
+          </g>
+        </svg>
+        <div class="divider"></div>
+        <div class="name">Mohammed Al-Hussein</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
