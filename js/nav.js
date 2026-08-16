@@ -61,7 +61,7 @@
 
   // اللوغو الأساسي بالهيدر (يرجّع للرئيسية، يتلوّن مع الصفحة)
   const navBrand = document.createElement('button');
-  navBrand.className = 'nav-brand'; navBrand.title = 'Mohammed Al-Hussein'; navBrand.setAttribute('aria-label','الصفحة الرئيسية');
+  navBrand.className = 'nav-brand'; navBrand.title = 'Muhammed Elhuseyin'; navBrand.setAttribute('aria-label','الصفحة الرئيسية');
   navBrand.innerHTML = '<svg viewBox="0 0 200 170" aria-hidden="true"><g fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">'
     + '<path stroke="var(--accent)" d="M42,132 L42,44 L86,96 L130,44 L130,132"/>'
     + '<path stroke="var(--accent-2)" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/></g></svg>';

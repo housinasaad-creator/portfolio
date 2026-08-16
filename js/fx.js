@@ -5,7 +5,7 @@
     /* 1) مقدّمة: الاسم يتكتب حرف-حرف على الرئيسية مع مؤشّر وامض */
     const nameEl = document.querySelector('.home-name');
     if(nameEl){
-      const full = 'Mohammed\nAl-Hussein';
+      const full = 'Muhammed\nElhuseyin';
       nameEl.style.whiteSpace = 'pre';       // نحترم سطر جديد \n
       nameEl.textContent = '';
       const caret = document.createElement('span');
