@@ -28,7 +28,7 @@ const CFG = window.RobotCFG = {
 };
 
 // حركة كل صفحة (13 صفحة)
-const PAGE_ANIM = ['wave','armstretch','hiphop','jump','clap','looking','laugh','filing','shoot','pointing','breakdance','jump','wave','wave'];
+const PAGE_ANIM = ['wave','looking','armstretch','hiphop','jump','clap','looking','laugh','filing','shoot','pointing','breakdance','jump','wave','wave'];
 const REACTS = ['hiphop'];   // الضغط = رقص
 let dancing = false;
 let currentPageAnim = 'wave';
@@ -211,11 +211,13 @@ loader.load(CFG.base, async (fbx)=>{
   // بعد ما تخلص أي حركة (مرة وحدة) → يرجع لوضعية وقوف طبيعية ويثبت (الراس يتبّع الماوس)
   mixer.addEventListener('finished', ()=> rest());
 
-  // حمّل باقي الحركات ثم ابدأ بصفحة البيت
-  await Promise.all(Object.entries(CFG.clips).map(([n,f])=>loadClip(n,f)));
-  window.robotPage(0);                  // حركة الصفحة الرئيسية (تحية)
+  // نظهر الروبوت فوراً (حركة التحية جاهزة من الملف الأساسي نفسه) — باقي الـ11 حركة تتحمّل بالخلفية بلا ما تحجب الظهور
+  window.robotPage(0);
   document.body.classList.add('robot-ready');
-  console.log('[robot] ready ✔ clips:', Object.keys(clips).join(', '), '| head:', headBone?.name);
+  console.log('[robot] ready ✔ (base) | head:', headBone?.name);
+  Promise.all(Object.entries(CFG.clips).map(([n,f])=>loadClip(n,f))).then(()=>{
+    console.log('[robot] all clips loaded ✔', Object.keys(clips).join(', '));
+  });
 }, undefined, (err)=> console.error('[robot] base load error:', err));
 
 /* ===== تتبّع الماوس بالراس ===== */

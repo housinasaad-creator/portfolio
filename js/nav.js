@@ -42,10 +42,10 @@
     }, 42);
   }
 
-  const NAMES = ['الرئيسية','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact','Playground'];
+  const NAMES = ['الرئيسية','من أنا','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact','Playground'];
   // لون التمييز لكل صفحة
   // ألوان متباعدة — كل صفحتين متتاليتين مختلفتين بوضوح (تبديل دافئ/بارد)
-  const ACCENT = ['#4d9fff','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa','#f472b6'];
+  const ACCENT = ['#4d9fff','#a78bfa','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa','#f472b6'];
 
   // روابط التواصل (تُستعمل بالهيدر) — يتلوّنوا مع الصفحة
   const SOCIALS = [
@@ -55,7 +55,7 @@
     ['github','https://github.com/housinasaad-creator','GitHub'],
   ];
 
-  // ===== هيدر علوي زجاجي ثابت: لوغو يسار · صفحات بالنص · تواصل يمين =====
+  // ===== هيدر علوي زجاجي ثابت: لوغو · صفحات بالنص · تواصل + CV + لغة =====
   const topnav = document.createElement('nav');
   topnav.id = 'topnav'; topnav.setAttribute('aria-label','التنقّل');
 

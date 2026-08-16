@@ -2,8 +2,7 @@
 (function(){
   // عدّاد الأرقام (أرقام عربية للعربي، لاتينية لغير العربي) — يُعاد تشغيله عند تغيير اللغة
   window.runCounters = function(){
-    const ar = (window.currentLang||'ar')==='ar';
-    const fmt = n => ar ? String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]) : String(n);
+    const fmt = n => String(n);   // أرقام لاتينية بكل اللغات (حتى بالعربي)
     document.querySelectorAll('[data-count]').forEach(el=>{
       const target = +el.getAttribute('data-count');
       const prefix = el.getAttribute('data-prefix') || '';
