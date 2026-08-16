@@ -35,8 +35,10 @@ let currentPageAnim = 'wave';
 
 const container = document.getElementById('robot-container');
 
-const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+// نخفّض دقّة العرض الداخلية شوي (خصوصاً بالموبايل) لتفادي التعليق — الحجم المرئي ما بيتغيّر، بس عدد البكسلات المرسومة أقل
+const PIXEL_RATIO = IS_MOBILE ? Math.min(devicePixelRatio, 1) : Math.min(devicePixelRatio, 1.5);
+const renderer = new THREE.WebGLRenderer({ antialias:!IS_MOBILE, alpha:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(PIXEL_RATIO);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 container.appendChild(renderer.domElement);
