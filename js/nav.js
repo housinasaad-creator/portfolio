@@ -84,10 +84,19 @@
     `<a class="nav-ico" href="${url}" target="_blank" rel="noopener" title="${label}" aria-label="${label}"><i style="--i:url(https://cdn.simpleicons.org/${slug})"></i></a>`
   ).join('');
 
-  topnav.append(navBrand, navLinksWrap, navContact);
+  // مبدّل اللغة
+  const navLang = document.createElement('div');
+  navLang.className = 'nav-lang';
+  navLang.innerHTML = [['ar','ع'],['en','EN'],['tr','TR']].map(([c,t])=>
+    `<button class="langbtn" data-lang="${c}" title="${c}">${t}</button>`).join('');
+  navLang.querySelectorAll('.langbtn').forEach(b=>
+    b.addEventListener('click', ()=> window.applyLang && window.applyLang(b.dataset.lang)));
+
+  topnav.append(navBrand, navLinksWrap, navContact, navLang);
   document.body.appendChild(topnav);
   const navlinks = [...navLinksWrap.children];
   function updateNav(){ navlinks.forEach((b,i)=> b.classList.toggle('on', i===cur)); }
+  window.setNavLabels = (arr)=>{ navlinks.forEach((b,i)=>{ if(arr[i]) b.textContent=arr[i]; }); };
   function hexRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
   function lighten(h,a){ const [r,g,b]=hexRgb(h),f=x=>Math.round(x+(255-x)*a); return `rgb(${f(r)},${f(g)},${f(b)})`; }
   function applyAccent(i){

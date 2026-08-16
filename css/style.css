@@ -249,6 +249,38 @@ body.robot-ready #robot-container{opacity:1;transform:none}
 @media (max-width:900px){ .pgrid{grid-template-columns:1fr 1fr} }
 @media (max-width:768px){ .pgrid{grid-template-columns:1fr;max-height:62vh;overflow-y:auto} .page-wide .panel{max-width:560px} }
 
+/* ===== مبدّل اللغة بالهيدر ===== */
+.nav-lang{flex:none;display:flex;gap:4px;align-items:center;padding-inline-start:8px}
+.langbtn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--muted);
+  background:none;border:1px solid var(--line);border-radius:8px;padding:5px 8px;min-width:30px;cursor:none;
+  transition:.2s}
+.langbtn:hover{color:var(--text);transform:translateY(-2px)}
+.langbtn.on{color:#05060f;background:var(--accent);border-color:var(--accent)}
+@media (max-width:768px){ .nav-lang{padding-inline-start:4px} .langbtn{padding:5px 6px;min-width:26px} }
+
+/* اتجاه المحتوى حسب اللغة */
+body.lang-ltr .panel{direction:ltr}
+body.lang-rtl .panel{direction:rtl}
+
+/* ===== بطاقة اختيار اللغة (شاشة البداية) ===== */
+#lang-splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 120% at 50% 30%,#0e1524,#070a12);
+  transition:opacity .5s ease,visibility .5s ease}
+#lang-splash.hide{opacity:0;visibility:hidden}
+.ls-inner{text-align:center;padding:24px;animation:appear .6s ease-out both}
+.ls-logo{margin-bottom:14px}
+.ls-name{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:clamp(22px,4vw,32px);letter-spacing:.5px}
+.ls-cards{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap;justify-content:center}
+.ls-card{display:flex;flex-direction:column;align-items:center;gap:6px;width:150px;padding:22px 16px;cursor:none;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;color:var(--text);
+  backdrop-filter:blur(8px);transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .25s,background .25s,box-shadow .3s}
+.ls-card:hover{transform:translateY(-8px) scale(1.05);border-color:#4d9fff;background:rgba(77,159,255,.12);
+  box-shadow:0 18px 44px -10px #4d9fff}
+.ls-flag{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;color:#4d9fff}
+.ls-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#fff}
+.ls-sub{font-size:12px;color:var(--muted)}
+@media (max-width:480px){ .ls-cards{gap:10px} .ls-card{width:44%;min-width:130px;padding:16px 10px} }
+
 /* ===== التواصل ===== */
 .contact-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
 .contact-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;

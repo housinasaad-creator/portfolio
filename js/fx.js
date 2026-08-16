@@ -1,5 +1,21 @@
 /* ===== لمسات "البهرجة": مقدّمة سينمائية + عدّادات + إمالة 3D للبطاقات ===== */
 (function(){
+  // عدّاد الأرقام (أرقام عربية للعربي، لاتينية لغير العربي) — يُعاد تشغيله عند تغيير اللغة
+  window.runCounters = function(){
+    const ar = (window.currentLang||'ar')==='ar';
+    const fmt = n => ar ? String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]) : String(n);
+    document.querySelectorAll('[data-count]').forEach(el=>{
+      const target = +el.getAttribute('data-count');
+      const prefix = el.getAttribute('data-prefix') || '';
+      const dur = 1200, t0 = performance.now();
+      (function frame(t){
+        const p = Math.min((t - t0)/dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + fmt(Math.round(target * eased));
+        if(p < 1) requestAnimationFrame(frame);
+      })(t0);
+    });
+  };
   const ready = ()=>{
 
     /* 1) مقدّمة: الاسم يتكتب حرف-حرف على الرئيسية مع مؤشّر وامض */
@@ -19,19 +35,8 @@
       })();
     }
 
-    /* 2) عدّادات: الأرقام تتزايد (أرقام عربية) */
-    const toAr = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-    document.querySelectorAll('[data-count]').forEach(el=>{
-      const target = +el.getAttribute('data-count');
-      const prefix = el.getAttribute('data-prefix') || '';
-      const dur = 1300, t0 = performance.now();
-      (function frame(t){
-        const p = Math.min((t - t0)/dur, 1);
-        const eased = 1 - Math.pow(1 - p, 3);            // تباطؤ ناعم
-        el.textContent = prefix + toAr(Math.round(target * eased));
-        if(p < 1) requestAnimationFrame(frame);
-      })(t0);
-    });
+    /* 2) عدّادات: الأرقام تتزايد */
+    window.runCounters();
 
     /* 3) إمالة 3D لبطاقات المشاريع مع الماوس */
     document.querySelectorAll('.proj').forEach(card=>{
