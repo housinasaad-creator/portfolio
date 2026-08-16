@@ -147,8 +147,8 @@
     const prev = cur;
     cur = target;
     document.body.classList.toggle('at-home', cur===0);
-    document.body.classList.toggle('on-playground', cur===13);
-    if(cur===13 && window.initPlayground) window.initPlayground();
+    document.body.classList.toggle('on-playground', cur===14);
+    if(cur===14 && window.initPlayground) window.initPlayground();
     applyAccent(cur);
     updateNav();
     typeCode(cur);                                   // ابدأ كتابة الكود للصفحة الجديدة
@@ -162,13 +162,19 @@
   // طول ما في مودال مفتوح، نوقف تنقّل الموقع (السكرول للمودال بس)
   const uiBlocked = ()=> document.body.classList.contains('modal-open');
 
-  // عجلة الماوس
+  // عجلة الماوس — لو المستخدم عم يمرّر جوّا صندوق نص طويل (متل صفحة "من أنا") ولسا فيه مجال، منسيبه يتمرّر عادي بدل ما نبدّل صفحة
   let wheelReady = 0;
   addEventListener('wheel', (e)=>{
     if(uiBlocked()) return;
-    const now = Date.now(); if(now < wheelReady) return;
     const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     if(Math.abs(d) < 10) return;
+    const scrollBox = e.target.closest('.about-scroll');
+    if(scrollBox){
+      const canDown = scrollBox.scrollTop + scrollBox.clientHeight < scrollBox.scrollHeight - 1;
+      const canUp   = scrollBox.scrollTop > 0;
+      if((d>0 && canDown) || (d<0 && canUp)) return;   // بيتمرّر داخل الصندوق طبيعياً، بلا تبديل صفحة
+    }
+    const now = Date.now(); if(now < wheelReady) return;
     wheelReady = now + DUR + 120;
     d > 0 ? next() : prev();
   }, { passive:true });
@@ -180,13 +186,21 @@
     else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
   });
 
-  // اللمس
-  let sx=0, sy=0;
-  addEventListener('touchstart', e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; }, {passive:true});
+  // اللمس — نفس منطق العجلة: لو اللمس بلّش جوّا صندوق نص طويل ولسا فيه مجال، منسيبه يتمرّر عادي بدل ما نبدّل صفحة
+  let sx=0, sy=0, sBox=null;
+  addEventListener('touchstart', e=>{
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+    sBox = e.target.closest ? e.target.closest('.about-scroll') : null;
+  }, {passive:true});
   addEventListener('touchend', e=>{
     if(uiBlocked()) return;
     const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
     if(Math.max(Math.abs(dx),Math.abs(dy)) < 40) return;
+    if(sBox && Math.abs(dy) >= Math.abs(dx)){
+      const canDown = sBox.scrollTop + sBox.clientHeight < sBox.scrollHeight - 1;
+      const canUp   = sBox.scrollTop > 0;
+      if((dy<0 && canDown) || (dy>0 && canUp)) return;   // لسا في مجال يتمرّر جوّا الصندوق نفسه
+    }
     (Math.abs(dx) > Math.abs(dy)) ? (dx<0?next():prev()) : (dy<0?next():prev());
   }, {passive:true});
 

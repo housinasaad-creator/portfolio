@@ -1,4 +1,6 @@
 /* ===== الروبوت 3D (Three.js) + تتبّع الماوس بالراس + تفاعل بالضغط ===== */
+// نستنى الصفحة (النص/الهيدر) ترتسم أول، وبعدين نبلّش الشغل الثقيل — بيقلّل إحساس "التجميد" لحظة فتح الموقع
+await new Promise(res => (window.requestIdleCallback ? requestIdleCallback(res, {timeout:500}) : setTimeout(res, 150)));
 const THREE = await import('three');
 const { FBXLoader } = await import('three/addons/loaders/FBXLoader.js');
 
@@ -35,9 +37,9 @@ let currentPageAnim = 'wave';
 
 const container = document.getElementById('robot-container');
 
-// نخفّض دقّة العرض الداخلية شوي (خصوصاً بالموبايل) لتفادي التعليق — الحجم المرئي ما بيتغيّر، بس عدد البكسلات المرسومة أقل
-const PIXEL_RATIO = IS_MOBILE ? Math.min(devicePixelRatio, 1) : Math.min(devicePixelRatio, 1.5);
-const renderer = new THREE.WebGLRenderer({ antialias:!IS_MOBILE, alpha:true, powerPreference:'high-performance' });
+// نخفّض دقّة العرض الداخلية (ديسكتوب وموبايل) لتفادي التجمّد بأول ثواني التحميل — الحجم المرئي ما بيتغيّر، بس عدد البكسلات المرسومة أقل بكثير
+const PIXEL_RATIO = IS_MOBILE ? Math.min(devicePixelRatio, 0.8) : Math.min(devicePixelRatio, 0.9);
+const renderer = new THREE.WebGLRenderer({ antialias:false, alpha:true, powerPreference:'high-performance', precision:'mediump' });
 renderer.setPixelRatio(PIXEL_RATIO);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -110,22 +112,21 @@ function addFaceLights(model, headBone){
   const localUp      = new THREE.Vector3(0,1,0).applyQuaternion(qInv).normalize();
   const localRight   = new THREE.Vector3().crossVectors(localUp, localForward).normalize();
 
-  // نجمع نقاط "الرأس" (أعلى الجسم) بوحدات عظمة الراس المحلية، ونحسب مركزه + نصف أقطاره الحقيقية بالاتجاهات الثلاثة
+  // نجمع صندوق "الرأس" (أعلى الجسم) بوحدات عظمة الراس المحلية — نفحص زوايا صندوق كل قطعة بس (مش كل نقطة فيها، أسرع بكثير وبلا تجميد)
   const bodyBox = new THREE.Box3().setFromObject(model);
   const bodyHeight = bodyBox.max.y - bodyBox.min.y;
   const yThresh = bodyBox.min.y + bodyHeight*0.86;
   const invHeadWorld = new THREE.Matrix4().copy(headBone.matrixWorld).invert();
-  const v = new THREE.Vector3();
+  const corner = new THREE.Vector3();
   const localBox = new THREE.Box3();     // صندوق الرأس بوحدات عظمة الراس المحلية
   model.traverse(o=>{
-    if(o.isMesh && o.geometry && o.geometry.attributes.position){
-      const posAttr = o.geometry.attributes.position;
-      const m = new THREE.Matrix4().multiplyMatrices(invHeadWorld, o.matrixWorld);
-      const wm = new THREE.Matrix4().copy(o.matrixWorld);
-      for(let i=0;i<posAttr.count;i++){
-        v.fromBufferAttribute(posAttr, i);
-        const wy = v.clone().applyMatrix4(wm).y;               // ارتفاع النقطة بالعالم
-        if(wy > yThresh) localBox.expandByPoint(v.applyMatrix4(m));  // ضمن الرأس → نضيفها محلياً
+    if(o.isMesh && o.geometry){
+      o.geometry.computeBoundingBox();
+      const bb = o.geometry.boundingBox; if(!bb) return;
+      for(let cx=0;cx<2;cx++) for(let cy=0;cy<2;cy++) for(let cz=0;cz<2;cz++){
+        corner.set(cx?bb.max.x:bb.min.x, cy?bb.max.y:bb.min.y, cz?bb.max.z:bb.min.z);
+        corner.applyMatrix4(o.matrixWorld);                    // زاوية الصندوق بالعالم
+        if(corner.y > yThresh) localBox.expandByPoint(corner.clone().applyMatrix4(invHeadWorld));
       }
     }
   });

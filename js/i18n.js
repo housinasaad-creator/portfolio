@@ -132,7 +132,6 @@
     if(ab && t.about){
       const A = t.about;
       const k=ab.querySelector('.kicker'); if(k) k.textContent=A.kicker;
-      const ttl=ab.querySelector('.page-title'); if(ttl) ttl.textContent=A.title;
       const sub=ab.querySelector('.arname'); if(sub) sub.textContent=A.subtitle;
       const txt=ab.querySelector('.about-text'); if(txt) txt.innerHTML=A.paragraphs.map(p=>'<p>'+p+'</p>').join('');
       const q=ab.querySelector('.about-quote'); if(q) q.textContent=A.quote;
