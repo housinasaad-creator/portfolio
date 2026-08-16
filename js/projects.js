@@ -113,9 +113,10 @@
     if(!acts)    acts = '<span class="pbtn ghost">مشروع خاص — بلا رابط عام</span>';
     modal.querySelector('.pmodal-actions').innerHTML = acts;
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');   // يوقف تنقّل الموقع طول ما المودال مفتوح
     mInner.scrollTop = 0;
   }
-  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.classList.remove('modal-open'); }
   modal.querySelector('.pmodal-close').addEventListener('click', closeModal);
   modal.querySelector('.pmodal-backdrop').addEventListener('click', closeModal);
   addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });

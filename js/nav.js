@@ -144,9 +144,13 @@
   const next = ()=> go(cur+1);
   const prev = ()=> go(cur-1);
 
+  // طول ما في مودال مفتوح، نوقف تنقّل الموقع (السكرول للمودال بس)
+  const uiBlocked = ()=> document.body.classList.contains('modal-open');
+
   // عجلة الماوس
   let wheelReady = 0;
   addEventListener('wheel', (e)=>{
+    if(uiBlocked()) return;
     const now = Date.now(); if(now < wheelReady) return;
     const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     if(Math.abs(d) < 10) return;
@@ -156,6 +160,7 @@
 
   // الكيبورد
   addEventListener('keydown', (e)=>{
+    if(uiBlocked()) return;
     if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); next(); }
     else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
   });
@@ -164,6 +169,7 @@
   let sx=0, sy=0;
   addEventListener('touchstart', e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; }, {passive:true});
   addEventListener('touchend', e=>{
+    if(uiBlocked()) return;
     const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
     if(Math.max(Math.abs(dx),Math.abs(dy)) < 40) return;
     (Math.abs(dx) > Math.abs(dy)) ? (dx<0?next():prev()) : (dy<0?next():prev());
