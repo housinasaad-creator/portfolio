@@ -25,13 +25,17 @@ body{
 @media (hover:none){ body{cursor:auto} }
 
 /* ===== الطبقات ===== */
-#bg-canvas{position:fixed;inset:0;z-index:0;display:block}
+/* فيديو الخلفية — يعبّي الشاشة بالكامل (عرض بالديسكتوب، طول بالموبايل)، قصّ الأطراف بدل التشويه */
+#bg-video{position:fixed;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;display:block}
+.bg-dim{position:fixed;inset:0;z-index:0;background:rgba(6,9,15,.62);pointer-events:none}
 /* دخول سينمائي للروبوت (يظهر لمّا يجهز) */
 #robot-container{position:fixed;inset:0;z-index:1;opacity:0;transform:scale(.93);
   transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
 body.robot-ready #robot-container{opacity:1;transform:none}
-/* موبايل: نشيل الروبوت خالص (الحاوية + التوهّج) */
-@media (max-width:768px){ body.no-robot #robot-container{display:none} }
+/* موبايل: الروبوت يظهر خلف النص بنصف الشاشة (الفيديو يضل خلفية بكل الأحوال) */
+@media (max-width:768px){
+  body.robot-ready #robot-container{opacity:.5;transform:scale(.8) translateY(-10%);transform-origin:center top}
+}
 #robot-container canvas{display:block;position:relative;z-index:1}
 .robot-glow{
   position:absolute;top:50%;right:16%;transform:translateY(-50%);
@@ -56,11 +60,13 @@ body.robot-ready #robot-container{opacity:1;transform:none}
 .nav-brand svg{width:42px;height:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
 .nav-brand svg path{transition:stroke .5s ease}
 .nav-brand:hover{transform:translateY(-2px) scale(1.08)}
-/* روابط الصفحات */
-.nav-links{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:5px;flex:1 1 auto}
-.navlink{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+/* روابط الصفحات — سطر واحد ثابت الارتفاع دايماً (سكرول أفقي لو التسميات أطول من الشاشة، مهما كانت اللغة) */
+.nav-links{display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:5px;flex:1 1 auto;
+  overflow-x:auto;scrollbar-width:none;min-width:0}
+.nav-links::-webkit-scrollbar{display:none}
+.navlink{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap;
   background:none;border:1px solid transparent;border-radius:9px;padding:6px 12px;cursor:none;
-  white-space:nowrap;transition:color .25s,background .25s,border-color .25s,transform .2s,box-shadow .3s}
+  transition:color .25s,background .25s,border-color .25s,transform .2s,box-shadow .3s}
 .navlink:hover{color:var(--text);transform:translateY(-2px) scale(1.05)}
 .navlink.on{color:#05060f;background:var(--accent);border-color:var(--accent);font-weight:700;
   box-shadow:0 4px 18px -3px var(--accent)}
@@ -73,11 +79,18 @@ body.robot-ready #robot-container{opacity:1;transform:none}
   -webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat;transition:background .5s ease}
 .nav-ico:hover{transform:translateY(-2px) scale(1.1);border-color:var(--accent);background:var(--accent-soft)}
 @media (max-width:768px){
-  #topnav{gap:8px;padding:7px 10px}
-  .nav-brand svg{width:32px}
-  .nav-links{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start}
-  .nav-ico{width:30px;height:30px}
-  .nav-ico i{width:15px;height:15px}
+  /* هيدر موبايل: صفّين — (لوغو · CV · لغة) فوق، وصفحات قابلة للتمرير تحت */
+  #topnav{gap:6px 8px;padding:8px 10px;justify-content:flex-start;flex-wrap:wrap}
+  .nav-brand svg{width:30px}
+  .nav-contact{display:none}                 /* أيقونات التواصل موجودة أصلاً بالرئيسية وContact */
+  .cv-head{order:2;margin-inline-start:auto}
+  .nav-lang{order:3}
+  .nav-links{order:4;flex:1 0 100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;
+    mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}
+  .nav-links::-webkit-scrollbar{display:none}
+  .navlink{padding:6px 10px;font-size:11.5px}
 }
 
 /* لوغو شخصي كبير + الاسم بجنبه، فوق عنوان كل صفحة (يُحقن بـ nav.js) — يتلوّن مع الصفحة */
@@ -265,7 +278,8 @@ body.lang-rtl .panel{direction:rtl}
 /* ===== بطاقة اختيار اللغة (شاشة البداية) ===== */
 #lang-splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(120% 120% at 50% 30%,#0e1524,#070a12);
-  transition:opacity .5s ease,visibility .5s ease}
+  transition:opacity .5s ease,visibility .5s ease;cursor:default}
+#lang-splash .ls-card{cursor:pointer}
 #lang-splash.hide{opacity:0;visibility:hidden}
 .ls-inner{text-align:center;padding:24px;animation:appear .6s ease-out both}
 .ls-logo{margin-bottom:14px}
@@ -281,6 +295,28 @@ body.lang-rtl .panel{direction:rtl}
 .ls-sub{font-size:12px;color:var(--muted)}
 @media (max-width:480px){ .ls-cards{gap:10px} .ls-card{width:44%;min-width:130px;padding:16px 10px} }
 
+/* ===== صفحة اللعب (Playground) ===== */
+body.on-playground #robot-container{opacity:0;pointer-events:none}
+.pg-stage{position:absolute;inset:0;z-index:0;pointer-events:auto}
+.playground-page #pg-canvas{width:100%;height:100%;display:block}
+.pg-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:15px}
+.pg-panel{position:relative;z-index:2;pointer-events:none;max-width:340px}
+.pg-panel>*{pointer-events:auto}
+.pg-hint{color:#c4ccdb;font-size:14px;max-width:300px;line-height:1.7}
+.pg-anims{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px;max-width:300px}
+.pg-btn{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);cursor:none;text-align:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:9px 8px;
+  backdrop-filter:blur(6px);transition:transform .2s,border-color .25s,background .25s,box-shadow .3s}
+.pg-btn:hover:not(:disabled){transform:translateY(-3px);border-color:var(--accent);background:var(--accent-soft)}
+.pg-btn.on{background:var(--accent);border-color:var(--accent);color:#05060f;font-weight:700;box-shadow:0 6px 18px -4px var(--accent)}
+.pg-btn:disabled{opacity:.45}
+.pg-mobile{display:none}
+@media (max-width:768px){
+  .pg-stage,.pg-loading,.pg-anims{display:none}
+  .pg-mobile{display:block;color:var(--muted);font-size:14px;margin-top:16px;max-width:300px;line-height:1.7}
+}
+
 /* ===== التواصل ===== */
 .contact-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
 .contact-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;
@@ -291,6 +327,14 @@ body.lang-rtl .panel{direction:rtl}
   font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);text-decoration:none;
   border:1px solid var(--line);transition:.25s}
 .contact-alt:hover{border-color:var(--accent);color:var(--accent)}
+/* أزرار السيرة الذاتية */
+.cv-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:11px 20px;border-radius:12px;cursor:none;
+  font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#05060f;text-decoration:none;
+  background:linear-gradient(120deg,var(--accent),var(--accent-2));transition:transform .25s,box-shadow .25s}
+.cv-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px -6px var(--accent)}
+.cv-head{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);cursor:none;
+  border:1px solid var(--accent);border-radius:8px;padding:6px 11px;text-decoration:none;white-space:nowrap;transition:.2s}
+.cv-head:hover{background:var(--accent);color:#05060f;transform:translateY(-2px)}
 /* أيقونات السوشيال — تتلوّن بلون الصفحة + انبثاق للأعلى عند hover */
 .socials{display:flex;gap:14px;margin-top:22px}
 .social{width:46px;height:46px;border-radius:12px;border:1px solid var(--line);

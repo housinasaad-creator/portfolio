@@ -42,10 +42,10 @@
     }, 42);
   }
 
-  const NAMES = ['الرئيسية','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact'];
+  const NAMES = ['الرئيسية','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact','Playground'];
   // لون التمييز لكل صفحة
   // ألوان متباعدة — كل صفحتين متتاليتين مختلفتين بوضوح (تبديل دافئ/بارد)
-  const ACCENT = ['#4d9fff','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa'];
+  const ACCENT = ['#4d9fff','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa','#f472b6'];
 
   // روابط التواصل (تُستعمل بالهيدر) — يتلوّنوا مع الصفحة
   const SOCIALS = [
@@ -84,15 +84,20 @@
     `<a class="nav-ico" href="${url}" target="_blank" rel="noopener" title="${label}" aria-label="${label}"><i style="--i:url(https://cdn.simpleicons.org/${slug})"></i></a>`
   ).join('');
 
+  // زر السيرة الذاتية (CV) — تحميل مباشر
+  const navCv = document.createElement('a');
+  navCv.className = 'cv-dl cv-head'; navCv.setAttribute('download','');
+  navCv.href = 'cv/CV_Muhammed_Elhuseyin_AR.pdf'; navCv.textContent = 'CV'; navCv.title = 'CV';
+
   // مبدّل اللغة
   const navLang = document.createElement('div');
   navLang.className = 'nav-lang';
-  navLang.innerHTML = [['ar','ع'],['en','EN'],['tr','TR']].map(([c,t])=>
+  navLang.innerHTML = [['ar','AR'],['en','EN'],['tr','TR']].map(([c,t])=>
     `<button class="langbtn" data-lang="${c}" title="${c}">${t}</button>`).join('');
   navLang.querySelectorAll('.langbtn').forEach(b=>
     b.addEventListener('click', ()=> window.applyLang && window.applyLang(b.dataset.lang)));
 
-  topnav.append(navBrand, navLinksWrap, navContact, navLang);
+  topnav.append(navBrand, navLinksWrap, navContact, navCv, navLang);
   document.body.appendChild(topnav);
   const navlinks = [...navLinksWrap.children];
   function updateNav(){ navlinks.forEach((b,i)=> b.classList.toggle('on', i===cur)); }
@@ -109,7 +114,6 @@
     if(glow) glow.style.background = `radial-gradient(circle,rgba(${r},${g},${b},.30),rgba(${r},${g},${b},.10) 45%,transparent 68%)`;
     window.currentAccent = hex;
     if(window.robotAccent) window.robotAccent(hex);   // توهّج الروبوت
-    if(window.bgAccent)    window.bgAccent(hex);       // الخلفية
   }
   // التنقّل دائماً أفقي: الصفحة الجديدة تدخل من اليمين (والرجوع يعكسها)
   const fwd = 'translateX(100%)';    // الجديدة تبدأ من اليمين وتزحف للوسط
@@ -143,6 +147,8 @@
     const prev = cur;
     cur = target;
     document.body.classList.toggle('at-home', cur===0);
+    document.body.classList.toggle('on-playground', cur===13);
+    if(cur===13 && window.initPlayground) window.initPlayground();
     applyAccent(cur);
     updateNav();
     typeCode(cur);                                   // ابدأ كتابة الكود للصفحة الجديدة

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=20">
 
 <script type="importmap">
 {
@@ -21,7 +21,10 @@
 </head>
 <body>
 
-  <canvas id="bg-canvas"></canvas>
+  <video id="bg-video" autoplay muted loop playsinline poster="assets/video/bg-poster.jpg">
+    <source src="assets/video/bg.mp4" type="video/mp4">
+  </video>
+  <div class="bg-dim"></div>
   <div id="robot-container"><div class="robot-glow"></div></div>
   <div class="vignette"></div>
 
@@ -45,6 +48,7 @@
           <span>تطبيقات Flutter</span>
           <span>ذكاء صناعي</span>
         </div>
+        <a class="cv-dl cv-full cv-btn" download href="cv/CV_Muhammed_Elhuseyin_AR.pdf">⬇ السيرة الذاتية</a>
         <div class="socials">
           <a class="social" href="https://wa.me/905050144543" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/whatsapp)"></i></a>
           <a class="social" href="https://www.instagram.com/mjh.6_6" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/instagram)"></i></a>
@@ -213,6 +217,7 @@
         <p class="page-desc">إذا عندك فكرة أو مشروع، أو بس بدك تحكي — راسلني وبكون سعيد نشتغل سوا.</p>
         <div class="contact-links">
           <a class="contact-btn" href="https://wa.me/905050144543" target="_blank" rel="noopener">واتساب — راسلني مباشرة</a>
+          <a class="cv-dl cv-full contact-alt" download href="cv/CV_Muhammed_Elhuseyin_AR.pdf">⬇ السيرة الذاتية</a>
           <a class="contact-alt" href="mailto:housin.asaad@gmail.com">✉ housin.asaad@gmail.com</a>
         </div>
         <div class="socials">
@@ -221,6 +226,19 @@
           <a class="social" href="https://www.facebook.com/share/1FGM8Z6WL1/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/facebook)"></i></a>
           <a class="social" href="https://github.com/housinasaad-creator" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/github)"></i></a>
         </div>
+      </div>
+    </section>
+
+    <!-- 14 · Playground -->
+    <section class="page playground-page">
+      <div class="pg-stage"><canvas id="pg-canvas"></canvas><div class="pg-loading">…</div></div>
+      <div class="panel pg-panel">
+        <span class="kicker">14 · اللعب</span>
+        <h2 class="page-title">Playground</h2>
+        <div class="arname">اللعب مع روبوت الذكاء — محمد الحسين</div>
+        <div class="page-desc pg-hint">اسحب بالماوس لتدوير الشخصية · اضغط أي حركة لتنفّذها</div>
+        <div class="pg-anims"></div>
+        <div class="pg-mobile">افتح الموقع على الكمبيوتر لتجربة الشخصية ثلاثية الأبعاد كاملة.</div>
       </div>
     </section>
 
@@ -233,12 +251,12 @@
   <div id="cring"></div>
   <div id="cdot"></div>
 
-  <script src="js/background.js?v=18"></script>
-  <script src="js/cursor.js?v=18"></script>
-  <script src="js/fx.js?v=18"></script>
-  <script src="js/projects.js?v=18"></script>
-  <script src="js/nav.js?v=18"></script>
-  <script src="js/i18n.js?v=18"></script>
-  <script type="module" src="js/robot.js?v=18"></script>
+  <script src="js/cursor.js?v=20"></script>
+  <script src="js/fx.js?v=20"></script>
+  <script src="js/projects.js?v=20"></script>
+  <script src="js/playground.js?v=20"></script>
+  <script src="js/nav.js?v=20"></script>
+  <script src="js/i18n.js?v=20"></script>
+  <script type="module" src="js/robot.js?v=20"></script>
 </body>
 </html>

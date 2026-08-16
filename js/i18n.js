@@ -7,7 +7,9 @@
       bio:'من ٦ سنين عم برمج. ببني مواقع وتطبيقات وأنظمة ذكية — من الواجهة اللي بتشوفها، للسيرفر ورا الكواليس، لنماذج الذكاء الصناعي. تحت معك ١٢ محطة، كل وحدة بتحكي عن شي بعرفه منيح.',
       stats:['سنين خبرة','تطوير ويب','تطبيقات Flutter','ذكاء صناعي'],
       scroll:'مرّر للاستكشاف', levels:['مبتدئ','متوسط','متقدّم'],
-      nav:['الرئيسية','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','مشاريع','تواصل'],
+      nav:['الرئيسية','إتش تي إم إل','سي إس إس','جافا سكربت','دارت','ثري جي إس','بايثون','بي إتش بي','سي','هندسة الذكاء','تدريب النماذج','مشاريع','تواصل','اللعب'],
+      pg_kicker:'14 · اللعب', pg_title:'اللعب مع روبوت الذكاء — محمد الحسين',
+      pg_hint:'اسحب بالماوس لتدوير الشخصية · اضغط أي حركة لتنفّذها', cv:'السيرة الذاتية',
       pages:{
        1:['02 · إتش تي إم إل','هيكل أي موقع','البنية اللي بينبني عليها أي موقع. بكتب HTML نظيف ومرتّب، دلالي (semantic)، وبراعي إنه يفتح صح على أي جهاز، ويكون سهل لمحرّكات البحث ولذوي الاحتياجات.'],
        2:['03 · سي إس إس','هون بصير حلو','هون بصير الموقع حلو ومرتّب. بشتغل تصاميم عصرية، حركات ناعمة، وترتيب بيزبط على الموبايل والكمبيوتر — متل هالموقع اللي قدامك هلق.'],
@@ -28,7 +30,9 @@
       bio:"I've been coding for 6+ years — building websites, apps, and intelligent systems, from the interface you see to the back-end server and AI models. There are 12 stations below; each one is about something I know well.",
       stats:['years experience','Web development','Flutter apps','Artificial Intelligence'],
       scroll:'Scroll to explore', levels:['Beginner','Intermediate','Advanced'],
-      nav:['Home','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact'],
+      nav:['Home','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact','Playground'],
+      pg_kicker:'14 · Playground', pg_title:'Play with the AI robot — Muhammed Elhuseyin',
+      pg_hint:'Drag with the mouse to rotate the character · tap any move to play it', cv:'Download CV',
       pages:{
        1:['02 · HTML','The skeleton of any website',"The structure every website is built on. I write clean, well-organized, semantic HTML that renders correctly on any device and stays friendly to search engines and accessibility."],
        2:['03 · CSS','Where it gets beautiful',"This is where a site becomes polished. I craft modern designs, smooth animations, and layouts that work on mobile and desktop — like the one in front of you now."],
@@ -49,7 +53,9 @@
       bio:'6+ yıldır kod yazıyorum — web siteleri, uygulamalar ve akıllı sistemler; gördüğünüz arayüzden arka uç sunucusuna ve yapay zekâ modellerine kadar. Aşağıda 12 durak var; her biri iyi bildiğim bir konuyu anlatıyor.',
       stats:['yıl deneyim','Web geliştirme','Flutter uygulamaları','Yapay Zekâ'],
       scroll:'Keşfetmek için kaydırın', levels:['Başlangıç','Orta','İleri'],
-      nav:['Ana Sayfa','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projeler','İletişim'],
+      nav:['Ana Sayfa','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projeler','İletişim','Oyun Alanı'],
+      pg_kicker:'14 · Oyun Alanı', pg_title:'Yapay zekâ robotuyla oyna — Muhammed Elhuseyin',
+      pg_hint:'Karakteri döndürmek için fareyle sürükleyin · oynatmak için bir harekete dokunun', cv:'CV İndir',
       pages:{
        1:['02 · HTML','Her web sitesinin iskeleti','Her web sitesinin üzerine kurulduğu yapı. Temiz, düzenli ve anlamsal (semantic) HTML yazarım; her cihazda doğru görünen, arama motorlarına ve erişilebilirliğe dost.'],
        2:['03 · CSS','Güzelleştiği yer','Bir sitenin şık hâle geldiği yer. Modern tasarımlar, yumuşak animasyonlar ve mobil ile masaüstünde çalışan düzenler yaparım — tıpkı şu an önünüzdeki gibi.'],
@@ -105,6 +111,15 @@
            const ca=c.querySelector('.arname'); if(ca) ca.textContent=t.contact[1];
            const cd=c.querySelector('.page-desc'); if(cd) cd.textContent=t.contact[2];
            const cb=c.querySelector('.contact-btn'); if(cb) cb.textContent=t.contact[3]; }
+    // Playground
+    const pg=pages[13];
+    if(pg){ const pk=pg.querySelector('.kicker'); if(pk) pk.textContent=t.pg_kicker;
+            const pt=pg.querySelector('.arname'); if(pt) pt.textContent=t.pg_title;
+            const ph=pg.querySelector('.pg-hint'); if(ph) ph.textContent=t.pg_hint; }
+    if(window.i18nPlayground) window.i18nPlayground(code);
+    // روابط السيرة الذاتية (حسب اللغة الحالية)
+    document.querySelectorAll('.cv-dl').forEach(a=> a.setAttribute('href','cv/CV_Muhammed_Elhuseyin_'+code.toUpperCase()+'.pdf'));
+    document.querySelectorAll('.cv-full').forEach(a=> a.textContent=t.cv);
 
     // الهيدر (أسماء الصفحات) + المشاريع (كروت/مودال)
     if(window.setNavLabels) window.setNavLabels(t.nav);
@@ -113,13 +128,11 @@
     if(window.runCounters) window.runCounters();
 
     document.querySelectorAll('.langbtn').forEach(b=> b.classList.toggle('on', b.dataset.lang===code));
-    localStorage.setItem('site_lang', code);
-    window.currentLang = code;
+    window.currentLang = code;   // بلا حفظ — البطاقة تطلع كل مرة
   }
   window.applyLang = applyLang;
 
   // ===== بطاقة اختيار اللغة (شاشة البداية = وقت تحميل النموذج 3D) =====
-  const saved = localStorage.getItem('site_lang');
   const splash = document.createElement('div');
   splash.id = 'lang-splash';
   splash.innerHTML =
@@ -127,14 +140,13 @@
     + '<div class="ls-logo"><svg viewBox="0 0 200 170" width="86" aria-hidden="true"><g fill="none" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"><path stroke="#4d9fff" d="M42,132 L42,44 L86,96 L130,44 L130,132"/><path stroke="#7cc0ff" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/></g></svg></div>'
     + '<div class="ls-name">Muhammed Elhuseyin</div>'
     + '<div class="ls-cards">'
-    +   ['ar','en','tr'].map(c=>'<button class="ls-card" data-lang="'+c+'"><span class="ls-flag">'+({ar:'ع',en:'EN',tr:'TR'}[c])+'</span><span class="ls-label">'+T[c].label+'</span><span class="ls-sub">'+T[c].native+'</span></button>').join('')
+    +   ['ar','en','tr'].map(c=>'<button class="ls-card" data-lang="'+c+'"><span class="ls-flag">'+({ar:'AR',en:'EN',tr:'TR'}[c])+'</span><span class="ls-label">'+T[c].label+'</span><span class="ls-sub">'+T[c].native+'</span></button>').join('')
     + '</div></div>';
   document.body.appendChild(splash);
   splash.querySelectorAll('.ls-card').forEach(btn=>{
     btn.addEventListener('click', ()=>{ applyLang(btn.dataset.lang); splash.classList.add('hide'); setTimeout(()=>splash.remove(),500); });
   });
 
-  // طبّق اللغة المحفوظة مبدئياً (بلا إخفاء البطاقة إلا إذا محفوظة من قبل)
-  applyLang(saved || 'ar');
-  if(saved){ splash.classList.add('hide'); setTimeout(()=>splash.remove(),400); }
+  // البطاقة تطلع كل مرة يفتح فيها الموقع (تعمل كشاشة تحميل للنموذج 3D) — بلا تذكّر
+  applyLang('ar');
 })();
