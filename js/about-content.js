@@ -5,6 +5,8 @@
       kicker: 'من أنا', subtitle: 'قصة صانع العوالم', waBtn: 'واتساب — راسلني مباشرة',
       nav: ['الرئيسية','إتش تي إم إل','سي إس إس','جافا سكربت','دارت','ثري جي إس','بايثون','بي إتش بي','سي','هندسة الذكاء','تدريب النماذج','مشاريع','تواصل'],
       navAbout: 'من أنا',
+      tags: ['أنمي','المحقّق كونان','أكاي شويتشي','سيجارة تفكير','عشق الإسبريسو'],
+      pageTitle: 'من أنا — Muhammed Elhuseyin',
       quote: 'أنا أهندس المستقبل، أدرّب الذكاء لأصنع العقول، وأكتب الشيفرات لأحرّك العالم.. فأنا والبرمجة وجهان لنفس العملة، فمَنْ أنتِ في عالمٍ أنا من يخطّ تفاصيله؟',
       sections: [
         { title:'البدايات: من عروس الصحراء إلى شاشات الحواسيب', paras:[
@@ -34,6 +36,8 @@
       kicker: 'About', subtitle: 'The Story of a World-Builder', waBtn: 'WhatsApp — message me directly',
       nav: ['Home','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact'],
       navAbout: 'About',
+      tags: ['Anime','Detective Conan','Akai Shuichi','Thinking Cigarette','Espresso Obsession'],
+      pageTitle: 'About — Muhammed Elhuseyin',
       quote: 'I engineer the future, train intelligence to shape minds, and write code to move the world.. I and programming are two faces of the same coin, so who are you, in a world whose details I am the one who charts them?',
       sections: [
         { title:'Beginnings: From the Bride of the Desert to Computer Screens', paras:[
@@ -63,6 +67,8 @@
       kicker: 'Hakkımda', subtitle: 'Bir Dünya Kurucusunun Hikâyesi', waBtn: 'WhatsApp — bana doğrudan yazın',
       nav: ['Ana Sayfa','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projeler','İletişim'],
       navAbout: 'Hakkımda',
+      tags: ['Anime','Dedektif Conan','Akai Shuichi','Düşünce Sigarası','Espresso Tutkusu'],
+      pageTitle: 'Hakkımda — Muhammed Elhuseyin',
       quote: 'Geleceği tasarlıyorum, zihinler inşa etmek için zekâyı eğitiyorum ve dünyayı hareket ettirmek için kod yazıyorum.. Ben ve programlama aynı madalyonun iki yüzüyüz, peki sen, ayrıntılarını benim çizdiğim bir dünyada kimsin?',
       sections: [
         { title:"Başlangıçlar: Çölün Gelini'nden Bilgisayar Ekranlarına", paras:[
@@ -91,6 +97,9 @@
   };
 
   function render(code){
+    // نحفظ بالـsessionStorage بالضبط متل i18n.js — هيك لو المستخدم بدّل اللغة من هون ورجع عالرئيسية،
+    // اللغة الجديدة بتضل معه (راجع نفس المنطق بـjs/i18n.js applyLang)
+    try{ sessionStorage.setItem('lang', code); }catch(e){}
     const t = T[code] || T.ar;
     document.documentElement.lang = code;
     document.documentElement.dir = code==='ar' ? 'rtl' : 'ltr';
@@ -102,6 +111,10 @@
     set('[data-t="subtitle"]', t.subtitle);
     set('.about-quote', t.quote);
     set('[data-t="waBtn"]', t.waBtn);
+    document.title = t.pageTitle;
+
+    const tagsWrap = document.querySelector('.tags');
+    if(tagsWrap) tagsWrap.innerHTML = t.tags.map(tag=>'<span>'+tag+'</span>').join('');
 
     const secWrap = document.getElementById('about-sections');
     secWrap.innerHTML = t.sections.map((s,i)=>
@@ -125,5 +138,8 @@
   }
 
   window.applyLang = render;   // nav.js بيستدعيها من أزرار اللغة بالهيدر (نفس واجهة i18n.js)
-  render('ar');
+  // نبلّش باللغة المحفوظة (لو المستخدم اختارها بصفحة تانية) بدل ما نصفّرها عالعربي دايماً
+  let savedLang = null;
+  try{ savedLang = sessionStorage.getItem('lang'); }catch(e){}
+  render(savedLang && T[savedLang] ? savedLang : 'ar');
 })();

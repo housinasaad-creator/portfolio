@@ -7,6 +7,7 @@
 
   const T = {
     ar:{ code:'ar', dir:'rtl', label:'العربية', native:'اختر لغتك',
+      pageTitle:'Muhammed Elhuseyin — مبرمج ومهندس ذكاء صناعي',
       role:'&lt; مبرمج ومهندس ذكاء صناعي /&gt;',
       bio:'من 6 سنين عم برمج. ببني مواقع وتطبيقات وأنظمة ذكية — من الواجهة اللي بتشوفها، للسيرفر ورا الكواليس، لنماذج الذكاء الصناعي. تحت معك 13 محطة، كل وحدة بتحكي عن شي بعرفه منيح.',
       stats:['سنين خبرة','تطوير ويب','تطبيقات Flutter','ذكاء صناعي'],
@@ -42,6 +43,7 @@
       contact:['14 · تواصل','جاهز نشتغل سوا؟','إذا عندك فكرة أو مشروع، أو بس بدك تحكي — راسلني وبكون سعيد نشتغل سوا.','واتساب — راسلني مباشرة','شغف بلا حدود، بالكود كتبت حكايتي، وبفخر بعيشها.'] },
 
     en:{ code:'en', dir:'ltr', label:'English', native:'Choose your language',
+      pageTitle:'Muhammed Elhuseyin — Software Developer & AI Engineer',
       role:'&lt; Software Developer &amp; AI Engineer /&gt;',
       bio:"I've been coding for 6+ years — building websites, apps, and intelligent systems, from the interface you see to the back-end server and AI models. There are 13 stations below; each one is about something I know well.",
       stats:['years experience','Web development','Flutter apps','Artificial Intelligence'],
@@ -77,6 +79,7 @@
       contact:['14 · Contact','Ready to work together?',"If you have an idea or a project, or just want to talk — reach out and I'll be happy to work together.",'WhatsApp — message me directly','Passion without limits — with code I wrote my story, and with pride I live it.'] },
 
     tr:{ code:'tr', dir:'ltr', label:'Türkçe', native:'Dilinizi seçin',
+      pageTitle:'Muhammed Elhuseyin — Yazılım Geliştirici & Yapay Zekâ Mühendisi',
       role:'&lt; Yazılım Geliştirici &amp; Yapay Zekâ Mühendisi /&gt;',
       bio:'6+ yıldır kod yazıyorum — web siteleri, uygulamalar ve akıllı sistemler; gördüğünüz arayüzden arka uç sunucusuna ve yapay zekâ modellerine kadar. Aşağıda 13 durak var; her biri iyi bildiğim bir konuyu anlatıyor.',
       stats:['yıl deneyim','Web geliştirme','Flutter uygulamaları','Yapay Zekâ'],
@@ -121,6 +124,7 @@
     const t = T[code] || T.ar;
     document.documentElement.lang = code;
     document.documentElement.dir  = t.dir;
+    document.title = t.pageTitle;
     document.body.classList.toggle('lang-rtl', t.dir==='rtl');
     document.body.classList.toggle('lang-ltr', t.dir==='ltr');
 
@@ -173,6 +177,11 @@
   // فلازم نشجّع المستخدم يلف الهاتف قبل ما يشوف المحتوى.
   // بترجع فوراً (وبتعلّم الموقع "جاهز") إذا ما في داعي للنافذة؛ وإلا بتضل مفتوحة لحتى يلف
   // المستخدم هاتفه أو يضغط "تمام" — وبس هيك بتعلّم الموقع "جاهز" (window.__markSiteReady).
+  const RP_T = {
+    ar:{ title:'لأفضل تجربة، اقلب هاتفك', sub:'الموقع مصمّم يتشاف أفقياً على الموبايل', ok:'تمام' },
+    en:{ title:'For the best experience, rotate your phone', sub:'This site is designed to be viewed in landscape on mobile', ok:'OK' },
+    tr:{ title:'En iyi deneyim için telefonunuzu çevirin', sub:'Bu site mobilde yatay görüntülenmek üzere tasarlandı', ok:'Tamam' },
+  };
   function maybeShowRotatePrompt(){
     const isMobile = matchMedia('(max-width:768px)').matches;
     const isPortrait = matchMedia('(orientation:portrait)').matches;
@@ -181,6 +190,7 @@
     if(!isMobile || !isPortrait || seen){ window.__markSiteReady(); return; }
     try{ sessionStorage.setItem('rotateSeen','1'); }catch(e){}
 
+    const rt = RP_T[window.currentLang] || RP_T.ar;
     const rp = document.createElement('div');
     rp.id = 'rotate-prompt';
     rp.innerHTML =
@@ -191,9 +201,9 @@
       +   '<path d="M86,40 A30,30 0 1 1 74,16" fill="none" stroke="#e0bb85" stroke-width="4" stroke-linecap="round"/>'
       +   '<path d="M74,8 L74,18 L84,18 Z" fill="#e0bb85"/>'
       + '</svg>'
-      + '<div class="rp-title">لأفضل تجربة، اقلب هاتفك</div>'
-      + '<div class="rp-sub">الموقع مصمّم يتشاف أفقياً على الموبايل</div>'
-      + '<button class="rp-ok" type="button">تمام</button>'
+      + '<div class="rp-title">'+rt.title+'</div>'
+      + '<div class="rp-sub">'+rt.sub+'</div>'
+      + '<button class="rp-ok" type="button">'+rt.ok+'</button>'
       + '</div>';
     document.body.appendChild(rp);
     requestAnimationFrame(()=> rp.classList.add('show'));
@@ -225,6 +235,8 @@
     applyLang(savedLang);
     maybeShowRotatePrompt();
   } else {
+    // ما في لغة محفوظة (أول زيارة أو ريفرش) — نطبّق العربي كافتراضي وقت ما البطاقة ظاهرة
+    applyLang('ar');
     // ===== بطاقة اختيار اللغة (شاشة البداية = وقت تحميل النموذج 3D) =====
     const splash = document.createElement('div');
     splash.id = 'lang-splash';
@@ -240,7 +252,4 @@
       btn.addEventListener('click', ()=>{ applyLang(btn.dataset.lang); splash.classList.add('hide'); setTimeout(()=>splash.remove(),500); maybeShowRotatePrompt(); });
     });
   }
-
-  // البطاقة تطلع كل مرة يفتح فيها الموقع (تعمل كشاشة تحميل للنموذج 3D) — بلا تذكّر
-  applyLang('ar');
 })();

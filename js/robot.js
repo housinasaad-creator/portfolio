@@ -483,12 +483,13 @@ function playAnimLazy(key, file, btn){
 function buildAnimCircles(){
   const wrap = document.createElement('div');
   wrap.id = 'anim-dots';
+  const DOT_R = 28;   // نصف قطر الدائرة (56px) — لازم نحسبه حتى الحافة الخارجية تضل بعيدة عن طرف الشاشة، مش مركزها بس
   const charCX = (IS_MOBILE ? 0.5 : 0.72) * innerWidth;
-  const charHalfW = IS_MOBILE ? 95 : 145;           // نصف عرض منطقة الشخصية تقريباً
-  const gap = 55;                                    // مسافة أمان أكبر عن الشخصية
+  const charHalfW = IS_MOBILE ? 95 : 125;           // نصف عرض منطقة الشخصية تقريباً
+  const gap = IS_MOBILE ? 55 : 40;                    // مسافة أمان عن الشخصية
   const rightStart = charCX + charHalfW + gap;
-  const rightEnd   = innerWidth - 34;
-  const yMin = 96, yMax = innerHeight - 56;
+  const rightEnd   = innerWidth - 34 - DOT_R;
+  const yMin = 96, yMax = innerHeight - 56 - DOT_R;
   const placed = [];
   function tryPlace(){
     for(let tries=0; tries<50; tries++){
