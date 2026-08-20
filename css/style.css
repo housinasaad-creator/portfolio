@@ -43,7 +43,10 @@ body{
 @media (hover:none){ body{cursor:auto} }
 
 /* ===== خلفية المدينة المحفورة — ثابتة (fixed)، بتلزّق مكانها وبيتمرّر الكلام فوقها بس ===== */
-.scene-bg{position:fixed;inset:0;z-index:0;
+/* width/height صريحة بدل الاعتماد على inset:0 (left+right معاً) — على بعض المتصفحات بوضعية
+   عرضية (innerWidth ≠ document.documentElement.clientWidth) كان بيحسب العرض التلقائي غلط،
+   فيطلع العنصر أضيق من الشاشة الحقيقية ومنزاح عن الحافة اليسرى (تأكدنا منها بلوحة تشخيص فعلية) */
+.scene-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;
   background:#141210 url('../assets/scene-bg.jpg') center/cover no-repeat;
   opacity:0;pointer-events:none;transition:opacity 1s ease}
 body.hero-gone .scene-bg{opacity:1}
@@ -51,7 +54,7 @@ body.hero-gone .scene-bg{opacity:1}
 
 /* ===== الطبقات ===== */
 /* الشخصية ما بتظهر فوق الهيرو — بتتلاشى تدريجياً وتظهر بس أول ما تنزل تحته بالسكرول، وبتضل ثابتة بمكانها */
-#robot-container{position:fixed;inset:0;z-index:1;opacity:0;transform:scale(.93);
+#robot-container{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;opacity:0;transform:scale(.93);
   transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
 body.robot-ready.hero-gone #robot-container{opacity:1;transform:none}
 /* أي جهاز لمس (موبايل/تابلت، بغض النظر عن الاتجاه) — الشخصية ثلاثية الأبعاد ودوائر حركاتها ما
@@ -76,7 +79,7 @@ body.robot-ready.hero-gone #robot-container{opacity:1;transform:none}
 .vignette{display:none}   /* الظل الغامق حوالين الشاشة اتشال بطلب المستخدم */
 
 /* ===== هيدر علوي زجاجي ثابت: لوغو · صفحات بالنص · تواصل + CV + لغة ===== */
-#topnav{position:fixed;top:0;left:0;right:0;z-index:9;direction:ltr;
+#topnav{position:fixed;top:0;left:0;width:100vw;z-index:9;direction:ltr;
   display:flex;align-items:center;justify-content:space-between;gap:8px;
   padding:8px 14px;
   background:rgba(241,236,224,.75);backdrop-filter:blur(16px) saturate(1.2);
@@ -359,7 +362,7 @@ body.lang-ltr .about-quote::before{right:auto;left:-6px}
 
 /* المودال */
 body.modal-open{overflow:hidden}
-.pmodal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px}
+.pmodal{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:50;display:none;align-items:center;justify-content:center;padding:24px}
 .pmodal.open{display:flex}
 .pmodal-backdrop{position:absolute;inset:0;background:rgba(10,10,8,.62);backdrop-filter:blur(6px)}
 .pmodal-inner{position:relative;z-index:1;width:min(560px,100%);max-height:88vh;overflow-y:auto;
@@ -407,7 +410,7 @@ body.lang-ltr .panel{direction:ltr}
 body.lang-rtl .panel{direction:rtl}
 
 /* ===== بطاقة اختيار اللغة (شاشة البداية) ===== */
-#lang-splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+#lang-splash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:100;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(120% 120% at 50% 30%,#f6f1e4,#e9e0cc);
   transition:opacity .5s ease,visibility .5s ease;cursor:default}
 #lang-splash .ls-card{cursor:pointer}
@@ -427,7 +430,7 @@ body.lang-rtl .panel{direction:rtl}
 @media (max-width:480px) and (orientation:portrait){ .ls-cards{gap:10px} .ls-card{width:44%;min-width:130px;padding:16px 10px} }
 
 /* ===== نافذة "اقلب هاتفك" — نفس أسلوب بطاقة اختيار اللغة ===== */
-#rotate-prompt{position:fixed;inset:0;z-index:101;display:flex;align-items:center;justify-content:center;
+#rotate-prompt{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:101;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(120% 120% at 50% 30%,#f6f1e4,#e9e0cc);
   opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;cursor:default}
 #rotate-prompt.show{opacity:1;visibility:visible}
@@ -504,7 +507,7 @@ body.nav-menu-open #menu-btn span:nth-child(3){transform:translateY(-7px) rotate
   #menu-btn{display:flex}
   /* لمّا القائمة مفتوحة: الهيدر بيصير لائحة عمودية ملء الشاشة، بلا ما نكرّر ولا عنصر — نفس الأزرار
      الموجودة أصلاً بس بتخطيط عمودي واضح وكبير للمس */
-  body.nav-menu-open #topnav{position:fixed;inset:0;height:100vh;width:100vw;
+  body.nav-menu-open #topnav{position:fixed;top:0;left:0;height:100vh;width:100vw;
     flex-direction:column;align-items:stretch;justify-content:flex-start;
     overflow-y:auto;padding:26px 22px 100px;background:var(--bg);backdrop-filter:none}
   body.nav-menu-open .nav-brand{display:flex;align-self:center;margin-bottom:24px}
@@ -520,7 +523,7 @@ body.nav-menu-open #menu-btn span:nth-child(3){transform:translateY(-7px) rotate
 }
 
 /* ===== دوائر الحركات العشوائية حوالين الشخصية — تتحمّل الحركة بس عند النقر ===== */
-#anim-dots{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .6s ease}
+#anim-dots{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:4;pointer-events:none;opacity:0;transition:opacity .6s ease}
 body.robot-ready.hero-gone #anim-dots{opacity:1}
 .anim-dot{position:fixed;transform:translate(-50%,-50%);pointer-events:auto;cursor:none;
   width:56px;height:56px;border-radius:50%;padding:0;
