@@ -2,8 +2,12 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
+// viewport-fit=cover: بلا هاي، كروم بيحجز مسافة أمان تلقائياً حوالين أي جزء غير مستطيل بالشاشة
+// (بروز كاميرا مثلاً) — وبوضعية عرضية هالجزء بيطلع عالجنب (يمين أو يسار) مش فوق، فبيولّد فراغ
+// جانبي غريب حوالين الهيدر/الخلفية الثابتة بلا ما نقدر نتحكم فيه من الـCSS إطلاقاً. cover
+// بيخلي المحتوى يرسم لتحت هالمنطقة (احتياط أمان أقل، بس ما في عناصر تحكم حسّاسة هون أصلاً).
 // بوضعية عرضية (landscape) وعرض شاشة حقيقي أضيق من 1280 (هاتف بالعرض)، منخلي المتصفح يتعامل مع
 // الصفحة وكأنها بعرض 1280 — نفس تقنية "طلب نسخة سطح المكتب". هيك innerWidth ووحدات vw كلها بتحسب
 // تلقائياً على أساس 1280 (بالضبط متل الكمبيوتر). المتصفح ما بيصغّر بصرياً النتيجة تلقائياً لمّا نغيّر
@@ -33,12 +37,12 @@
     if(need){
       var scale = rw / META_W;
       if(scale > 0 && scale <= 1){
-        want = 'width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no';
+        want = 'width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no, viewport-fit=cover';
       } else {
-        want = 'width=device-width, initial-scale=1';
+        want = 'width=device-width, initial-scale=1, viewport-fit=cover';
       }
     } else {
-      want = 'width=device-width, initial-scale=1';
+      want = 'width=device-width, initial-scale=1, viewport-fit=cover';
     }
     if(meta.getAttribute('content') !== want){
       meta.setAttribute('content', want);

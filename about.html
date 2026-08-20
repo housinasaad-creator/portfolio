@@ -2,8 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
+// viewport-fit=cover: راجع التعليق التفصيلي بـindex.html — بدونها كروم بيحجز هامش أمان تلقائي
+// حوالين بروز الكاميرا بوضعية عرضية، وهاد بالضبط سبب الفراغ الجانبي حوالين الهيدر/الخلفية.
 // نفس تقنية index.html: بوضعية landscape وعرض شاشة أضيق من 1280، نخلي الصفحة تتصرّف وكأنها بعرض
 // 1280 (نسخة كمبيوتر) — راجع التعليق التفصيلي بـindex.html.
 (function(){
@@ -27,10 +29,10 @@
     if(need){
       var scale = rw / META_W;
       want = (scale > 0 && scale <= 1)
-        ? ('width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no')
-        : 'width=device-width, initial-scale=1';
+        ? ('width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no, viewport-fit=cover')
+        : 'width=device-width, initial-scale=1, viewport-fit=cover';
     } else {
-      want = 'width=device-width, initial-scale=1';
+      want = 'width=device-width, initial-scale=1, viewport-fit=cover';
     }
     if(meta.getAttribute('content') !== want) meta.setAttribute('content', want);
   }
