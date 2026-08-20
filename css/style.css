@@ -189,7 +189,7 @@ body.lang-rtl .navlink{font-size:13.5px}
 
 /* ===== من أنا (About) — بلا عنوان كبير (بس الكيكر)، المحتوى يبلّش من فوق مباشرة ===== */
 .about-page{align-items:flex-start !important;padding-top:100px !important}
-.about-panel{max-width:760px;position:relative;z-index:1}
+.about-panel{max-width:640px;position:relative;z-index:1}
 .about-page .kicker{font-size:20px}
 .about-subtitle{margin-top:6px;font-size:clamp(36px,5.2vw,54px);font-weight:700;color:var(--text);font-family:'Space Grotesk',sans-serif}
 .about-scroll{margin-top:10px}

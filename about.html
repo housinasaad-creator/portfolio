@@ -8,10 +8,15 @@
 // 1280 (نسخة كمبيوتر) — راجع التعليق التفصيلي بـindex.html.
 (function(){
   var META_W = 1280;
+  // مصدر "العرض الحقيقي" الأصغر بين screen.width وinnerWidth، بلا تخزين مؤقّت — راجع التعليق
+  // التفصيلي بـindex.html (نفس المشكلة: بعض المتصفحات بترجّع screen.width غلط بوضعية عرضية).
   function realWidth(){
-    var w = screen.width || innerWidth;
-    if(!w || w < 100 || w > 4000) w = innerWidth;
-    return w;
+    var candidates = [];
+    if(innerWidth > 0) candidates.push(innerWidth);
+    if(screen.width > 0) candidates.push(screen.width);
+    candidates = candidates.filter(function(w){ return w >= 100 && w <= 4000; });
+    if(!candidates.length) return innerWidth || 375;
+    return Math.min.apply(null, candidates);
   }
   function apply(){
     var meta = document.querySelector('meta[name="viewport"]');
@@ -29,7 +34,7 @@
     }
     if(meta.getAttribute('content') !== want) meta.setAttribute('content', want);
   }
-  apply();
+  apply();   // بلا setTimeout بعدها — أي تعديل عالـmeta بعد ما الصفحة بلشت ترندر بيسبب خلل بصري (راجع index.html)
   addEventListener('resize', apply);
   addEventListener('orientationchange', apply);
 })();
@@ -40,7 +45,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=105">
+<link rel="stylesheet" href="css/style.css?v=106">
 
 <script type="importmap">
 {

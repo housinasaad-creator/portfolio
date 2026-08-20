@@ -11,14 +11,18 @@
 // نحسب ونفرض نسبة التصغير (initial-scale) يدوياً بنفسنا = عرض الشاشة الحقيقي ÷ 1280.
 (function(){
   var META_W = 1280;
-  // مصدر "العرض الحقيقي": screen.width الأساسي (ثابت، ما بيتأثر بتعديلاتنا عالـmeta) — بس بعض
-  // المتصفحات بترجعه 0 لحظة أول تشغيل قبل ما يجهز، فمنستعمل innerWidth كبديل احتياطي وقتها،
-  // ومنتأكّد الرقم النهائي منطقي (بين 100 و1280) قبل ما نستعمله أبداً — تفادياً لـinitial-scale=0
-  // (يلي المتصفح بيعتبره غير صالح وبيرجع لقيمة افتراضية غلط، وده سبب ظهور كل شي مكبّر ومتراكب).
+  // مصدر "العرض الحقيقي": بعض المتصفحات بترجّع screen.width غلط بوضعية عرضية (قيمة أكبر من العرض
+  // الفعلي المتاح) — لو وثقنا فيه لحاله بيطلع الموقع كبير وملخبط ومتراكب. فمنقارن أكتر من مصدر
+  // (screen.width و innerWidth) ومنختار الأصغر المنطقي بينهم بكل مرة (المصدر يلي بيبالغ بتقدير
+  // العرض ما منوثق فيه لحاله). بلا تخزين مؤقّت — تعديل الـmeta وحده ما بيطلق حدث resize فعلي
+  // (جرّبناها)، فمافي خطر تذبذب لا نهائي من إعادة القياس بكل استدعاء.
   function realWidth(){
-    var w = screen.width || innerWidth;
-    if(!w || w < 100 || w > 4000) w = innerWidth;
-    return w;
+    var candidates = [];
+    if(innerWidth > 0) candidates.push(innerWidth);
+    if(screen.width > 0) candidates.push(screen.width);
+    candidates = candidates.filter(function(w){ return w >= 100 && w <= 4000; });
+    if(!candidates.length) return innerWidth || 375;
+    return Math.min.apply(null, candidates);
   }
   function apply(){
     var meta = document.querySelector('meta[name="viewport"]');
@@ -42,6 +46,10 @@
       requestAnimationFrame(function(){ requestAnimationFrame(function(){ dispatchEvent(new Event('logical-resize')); }); });
     }
   }
+  // apply() بيشتغل فوراً وبشكل متزامن هون (قبل أي رندر/رسم) — أهم شي ما نعيد استدعاءه بعد قليل
+  // من تحميل الصفحة (متل setTimeout)، لأنه أي تعديل عالـmeta بعد ما الصفحة بلشت ترندر فعلياً
+  // بيسبب خلل بصري بالعناصر fixed (خلفية جزئية، عناصر ما بتنزاح صح) — جرّبناها وأكّدناها سابقاً.
+  // القياس الأول (screen.width/innerWidth الأصغر بينهم) موثوق كفاية من أول استدعاء.
   apply();
   addEventListener('resize', apply);
   addEventListener('orientationchange', apply);
@@ -54,7 +62,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=105">
+<link rel="stylesheet" href="css/style.css?v=106">
 
 <script type="importmap">
 {
