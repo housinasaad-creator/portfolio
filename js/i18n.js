@@ -192,7 +192,7 @@
 
     const rt = RP_T[window.currentLang] || RP_T.ar;
     const rp = document.createElement('div');
-    rp.id = 'rotate-prompt';
+    rp.id = 'rotate-prompt'; rp.className = 'vv-fixed';   // تعويض انزياح العناصر الثابتة (راجع index.html)
     rp.innerHTML =
       '<div class="rp-inner">'
       + '<svg class="rp-icon" viewBox="0 0 120 120" aria-hidden="true">'
@@ -239,7 +239,7 @@
     applyLang('ar');
     // ===== بطاقة اختيار اللغة (شاشة البداية = وقت تحميل النموذج 3D) =====
     const splash = document.createElement('div');
-    splash.id = 'lang-splash';
+    splash.id = 'lang-splash'; splash.className = 'vv-fixed';   // تعويض انزياح العناصر الثابتة (راجع index.html)
     splash.innerHTML =
       '<div class="ls-inner">'
       + '<div class="ls-logo"><img src="assets/logo/mjh-logo.svg" width="86" alt="MJH"></div>'

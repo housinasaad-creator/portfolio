@@ -59,19 +59,39 @@
   addEventListener('orientationchange', apply);
   window.__applyViewportMode = apply;
 
-  // بعض المتصفحات بتخلّي الـvisual viewport منزاح أفقياً عن الـlayout viewport (خصوصاً مع
-  // initial-scale مفروض يدوياً) — العناصر fixed بتبين منزاحة عن حافة الشاشة الحقيقية بسبب هيك.
-  // منقرأ الانزياح لايف من visualViewport ومنعوّضه بمتغيّر CSS (--vv-offset-x) تستعمله .vv-fixed.
-  function syncVVOffset(){
-    var vv = window.visualViewport;
-    var off = vv ? vv.offsetLeft : 0;
-    document.documentElement.style.setProperty('--vv-offset-x', (-off) + 'px');
+  // ===== تعويض انزياح العناصر الثابتة (position:fixed) عن حافة الشاشة المرئية =====
+  // على هالجهاز بوضعية عرضية: أي عنصر fixed مثبّت على left:0 بيظهر منزاح لليمين بمقدار ثابت
+  // (~106px = الفرق بين عرض الـlayout viewport 1280 والعرض المرئي 1174). السبب غالباً RTL +
+  // شريط تنقّل نظام جانبي بياكل من عرض الشاشة تحت تقنية الـmeta width=1280. مهما عدّلنا left/width
+  // بالـCSS ما بينحل، لأنه الانزياح بنظام الإحداثيات نفسه مش بأبعاد العنصر. الحل الجذري: نقيس
+  // الانزياح فعلياً بعنصر تجريبي (probe) — بنحط عنصر fixed على left:0 ونشوف وين وقع فعلياً بالنسبة
+  // للشاشة المرئية (getBoundingClientRect) — ونعوّض بالضبط بنفس المقدار عبر متغيّر CSS تستعمله
+  // كل عناصر .vv-fixed (transform:translateX). ملاحظة: قياس/تعديل transform بعد الرندر آمن تماماً
+  // (بعكس تعديل الـmeta viewport) فمنقدر نعيده بأمان لحتى يستقر التخطيط.
+  function syncFixedShift(){
+    if(!document.body) return;
+    var probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;visibility:hidden;pointer-events:none;margin:0;border:0;padding:0;transform:none;z-index:-1';
+    document.body.appendChild(probe);
+    var shift = probe.getBoundingClientRect().left;
+    probe.remove();
+    if(!isFinite(shift)) shift = 0;
+    document.documentElement.style.setProperty('--vv-offset-x', (-shift) + 'px');
   }
+  function scheduleShift(){
+    syncFixedShift();
+    requestAnimationFrame(syncFixedShift);   // بعد فريم — بعد ما يستقر تعديل الـmeta والتخطيط
+    setTimeout(syncFixedShift, 150);
+  }
+  window.__syncFixedShift = scheduleShift;
+  if(document.readyState === 'loading') addEventListener('DOMContentLoaded', scheduleShift);
+  else scheduleShift();
+  addEventListener('resize', scheduleShift);
+  addEventListener('orientationchange', scheduleShift);
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', syncVVOffset);
-    visualViewport.addEventListener('scroll', syncVVOffset);
+    visualViewport.addEventListener('resize', scheduleShift);
+    visualViewport.addEventListener('scroll', scheduleShift);
   }
-  syncVVOffset();
 })();
 </script>
 <title>Muhammed Elhuseyin — مبرمج ومهندس ذكاء صناعي</title>
@@ -329,9 +349,9 @@
 
   <script src="js/cursor.js?v=56"></script>
   <script src="js/fx.js?v=56"></script>
-  <script src="js/projects.js?v=56"></script>
+  <script src="js/projects.js?v=57"></script>
   <script src="js/nav.js?v=72"></script>
-  <script src="js/i18n.js?v=63"></script>
+  <script src="js/i18n.js?v=64"></script>
   <script type="module" src="js/robot.js?v=147"></script>
 
   <!-- لوحة تشخيص مؤقتة — لازم تتشال بعد ما نلاقي سبب انزياح الهيدر/الخلفية عليمين. -->
@@ -359,6 +379,7 @@
         + 'meta: ' + meta + '\n'
         + 'topnav left/right/w: ' + (navR ? navR.left.toFixed(1)+' / '+navR.right.toFixed(1)+' / '+navR.width.toFixed(1) : '-') + '\n'
         + 'scene-bg left/right/w: ' + (bgR ? bgR.left.toFixed(1)+' / '+bgR.right.toFixed(1)+' / '+bgR.width.toFixed(1) : '-') + '\n'
+        + 'fixed-shift var: ' + getComputedStyle(document.documentElement).getPropertyValue('--vv-offset-x') + '\n'
         + 'dpr: ' + devicePixelRatio + '  dir(html): ' + document.documentElement.dir;
     }
     upd();

@@ -136,7 +136,7 @@
   }
 
   const modal = document.createElement('div');
-  modal.className = 'pmodal'; modal.setAttribute('aria-hidden','true');
+  modal.className = 'pmodal vv-fixed'; modal.setAttribute('aria-hidden','true');   // تعويض انزياح العناصر الثابتة (راجع index.html)
   modal.innerHTML =
     '<div class="pmodal-backdrop"></div>'
     + '<div class="pmodal-inner" role="dialog" aria-modal="true">'

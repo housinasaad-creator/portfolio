@@ -40,17 +40,31 @@
   addEventListener('resize', apply);
   addEventListener('orientationchange', apply);
 
-  // تعويض انزياح الـvisual viewport عن الـlayout viewport — راجع التعليق التفصيلي بـindex.html
-  function syncVVOffset(){
-    var vv = window.visualViewport;
-    var off = vv ? vv.offsetLeft : 0;
-    document.documentElement.style.setProperty('--vv-offset-x', (-off) + 'px');
+  // تعويض انزياح العناصر الثابتة عن حافة الشاشة المرئية بالقياس الفعلي — راجع التعليق التفصيلي بـindex.html
+  function syncFixedShift(){
+    if(!document.body) return;
+    var probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;visibility:hidden;pointer-events:none;margin:0;border:0;padding:0;transform:none;z-index:-1';
+    document.body.appendChild(probe);
+    var shift = probe.getBoundingClientRect().left;
+    probe.remove();
+    if(!isFinite(shift)) shift = 0;
+    document.documentElement.style.setProperty('--vv-offset-x', (-shift) + 'px');
   }
+  function scheduleShift(){
+    syncFixedShift();
+    requestAnimationFrame(syncFixedShift);
+    setTimeout(syncFixedShift, 150);
+  }
+  window.__syncFixedShift = scheduleShift;
+  if(document.readyState === 'loading') addEventListener('DOMContentLoaded', scheduleShift);
+  else scheduleShift();
+  addEventListener('resize', scheduleShift);
+  addEventListener('orientationchange', scheduleShift);
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', syncVVOffset);
-    visualViewport.addEventListener('scroll', syncVVOffset);
+    visualViewport.addEventListener('resize', scheduleShift);
+    visualViewport.addEventListener('scroll', scheduleShift);
   }
-  syncVVOffset();
 })();
 </script>
 <title>من أنا — Muhammed Elhuseyin</title>
