@@ -2,3 +2,12 @@ serve-nocache.py
 *.bak
 
 CLAUDE.md
+.claude/
+
+# شخصية about.html القديمة (استُبدلت باللوغو) — ما عاد فيها استخدام، وفيها ملف 95MB بيعطّل الرفع
+assets/robot/character2/
+assets/robot/mannequin/
+js/about-robot.js
+
+# خوذة الروبوت القديمة (انحذفت من robot.js) — ما عاد فيها استخدام
+assets/robot/helmet/

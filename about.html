@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+// نفس تقنية index.html: بوضعية landscape وعرض شاشة أضيق من 1280، نخلي الصفحة تتصرّف وكأنها بعرض
+// 1280 (نسخة كمبيوتر) — راجع التعليق التفصيلي بـindex.html.
+(function(){
+  var META_W = 1280;
+  function realWidth(){
+    var w = screen.width || innerWidth;
+    if(!w || w < 100 || w > 4000) w = innerWidth;
+    return w;
+  }
+  function apply(){
+    var meta = document.querySelector('meta[name="viewport"]');
+    var landscape = matchMedia('(orientation:landscape)').matches;
+    var rw = realWidth();
+    var need = landscape && rw > 0 && rw < META_W;
+    var want;
+    if(need){
+      var scale = rw / META_W;
+      want = (scale > 0 && scale <= 1)
+        ? ('width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no')
+        : 'width=device-width, initial-scale=1';
+    } else {
+      want = 'width=device-width, initial-scale=1';
+    }
+    if(meta.getAttribute('content') !== want) meta.setAttribute('content', want);
+  }
+  apply();
+  addEventListener('resize', apply);
+  addEventListener('orientationchange', apply);
+})();
+</script>
+<title>من أنا — Muhammed Elhuseyin</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=105">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+  <div class="scene-bg scene-bg--on"></div>
+  <img class="about-logo" src="assets/logo/mjh-logo.svg" alt="MJH" draggable="false">
+
+  <main class="page about-page in-view">
+    <div class="panel about-panel">
+      <span class="kicker" data-t="kicker">من أنا</span>
+      <div class="arname about-subtitle" data-t="subtitle">قصة صانع العوالم</div>
+
+      <div class="about-quote" data-t="quote">أنا أهندس المستقبل، أدرّب الذكاء لأصنع العقول، وأكتب الشيفرات لأحرّك العالم.. فأنا والبرمجة وجهان لنفس العملة، فمَنْ أنتِ في عالمٍ أنا من يخطّ تفاصيله؟</div>
+
+      <div class="about-sections" id="about-sections"></div>
+
+      <div class="about-closing" id="about-closing"></div>
+
+      <div class="tags"><span>أنمي</span><span>المحقّق كونان</span><span>أكاي شويتشي</span><span>سيجارة تفكير</span><span>عشق الإسبريسو</span></div>
+
+      <div class="contact-links" id="about-contact">
+        <a class="contact-btn" href="https://wa.me/905050144543" target="_blank" rel="noopener" data-t="waBtn">واتساب — راسلني مباشرة</a>
+        <a class="contact-alt" href="mailto:housin.asaad@gmail.com">✉ housin.asaad@gmail.com</a>
+      </div>
+      <div class="socials">
+        <a class="social" href="https://wa.me/905050144543" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/whatsapp)"></i></a>
+        <a class="social" href="https://www.instagram.com/mjh.6_6" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/instagram)"></i></a>
+        <a class="social" href="https://www.facebook.com/share/1FGM8Z6WL1/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/facebook)"></i></a>
+        <a class="social" href="https://github.com/housinasaad-creator" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/github)"></i></a>
+      </div>
+    </div>
+  </main>
+
+  <!-- المؤشّر المخصّص -->
+  <div id="cring"></div>
+  <div id="cdot"></div>
+
+  <script src="js/cursor.js?v=62"></script>
+  <script src="js/about-content.js?v=62"></script>
+  <script src="js/nav.js?v=71"></script>
+</body>
+</html>

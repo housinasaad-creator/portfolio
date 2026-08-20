@@ -1,51 +1,16 @@
-/* ===== نظام التنقّل الاتجاهي + خريطة بصرية =====
-   المسار: 3 يمين → 3 تحت → 3 يسار → 3 فوق (يتكرر)
-   الانتقال: تمرير جانبي باتجاه الحركة، متل تقليب شاشات الموبايل. */
+/* ===== نظام التنقّل: سكرول عادي (فوق/تحت) — الروبوت ثابت يمين، بدون تقليب صفحات =====
+   شغّال على index.html (فيها كل الأقسام) وعلى about.html (صفحة مستقلة) بنفس الملف:
+   إذا الصفحة الحالية فيها #pages .page (index) بيشتغل سكرول-لقسم، وإلا (about.html) بيرجّع
+   لـ index.html#pN. القسم الحالي بيتحدّد بمراقبة السكرول، وكل قسم بيتلاشى دخول وخروج. */
 (function(){
   const pages = [...document.querySelectorAll('#pages .page')];
   const n = pages.length;
-  let cur = 0, lock = false;
-  const DUR = 720;
+  const onIndex = n > 0;
+  let cur = 0;
 
-  // (اللوغو المكرر فوق العناوين اتشال — بقي فقط لوغو كبير بالصفحة الرئيسية)
-
-  // ===== كود يتكتب ذاتياً بكل صفحة لغة (بلون الصفحة) =====
-  const SNIPPETS = ['',
-    '<h1>Hello, World</h1>',                 // HTML
-    '.hero { color: #fff; }',                // CSS
-    "const hi = () => console.log('Hi');",   // JavaScript
-    "void main() => print('Hi');",           // Dart
-    'const scene = new THREE.Scene();',      // Three.js
-    'def hi():\n    print("Hi")',            // Python
-    '<?php echo "Hi"; ?>',                   // PHP
-    'printf("Hello\\n");',                   // C
-    'reply = model.chat("Hi")',              // AI Engineering
-    'model.fit(X, y, epochs=10)',            // AI Training
-    '', ''];                                 // Projects / Contact — بلا كود
-  pages.forEach((p,i)=>{
-    if(!SNIPPETS[i]) return;
-    const panel = p.querySelector('.panel'); if(!panel) return;
-    const pre = document.createElement('pre'); pre.className = 'code-type';
-    const code = document.createElement('code'); code.setAttribute('data-src', SNIPPETS[i]);
-    pre.appendChild(code); panel.appendChild(pre);
-  });
-  let typeTimer = null;
-  function typeCode(i){
-    clearInterval(typeTimer);
-    const code = pages[i] && pages[i].querySelector('.code-type code');
-    if(!code) return;
-    const txt = code.getAttribute('data-src') || '';
-    code.textContent = ''; let k = 0;
-    typeTimer = setInterval(()=>{
-      code.textContent = txt.slice(0, ++k);
-      if(k >= txt.length) clearInterval(typeTimer);
-    }, 42);
-  }
-
-  const NAMES = ['الرئيسية','من أنا','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact','Playground'];
-  // لون التمييز لكل صفحة
-  // ألوان متباعدة — كل صفحتين متتاليتين مختلفتين بوضوح (تبديل دافئ/بارد)
-  const ACCENT = ['#4d9fff','#a78bfa','#ff5a36','#38bdf8','#ffd60a','#22d3ee','#ff5db1','#6aa9ff','#f59e0b','#22c55e','#a855f7','#ec4899','#34d399','#60a5fa','#f472b6'];
+  const NAMES = ['الرئيسية','HTML','CSS','JavaScript','Dart','Three.js','Python','PHP','C','AI Engineering','AI Training','Projects','Contact'];
+  // لون تمييز واحد موحّد لكل الصفحات — ذهبي/نحاسي (هوية الموقع الفاتحة الفاخرة)
+  const ACCENT = Array(Math.max(n,1)).fill('#c9975f');
 
   // روابط التواصل (تُستعمل بالهيدر) — يتلوّنوا مع الصفحة
   const SOCIALS = [
@@ -55,27 +20,29 @@
     ['github','https://github.com/housinasaad-creator','GitHub'],
   ];
 
-  // ===== هيدر علوي زجاجي ثابت: لوغو · صفحات بالنص · تواصل + CV + لغة =====
+  // ===== هيدر علوي زجاجي ثابت: لوغو · صفحات بالنص · من أنا (آخر وحدة) · تواصل + CV + لغة =====
   const topnav = document.createElement('nav');
   topnav.id = 'topnav'; topnav.setAttribute('aria-label','التنقّل');
 
   // اللوغو الأساسي بالهيدر (يرجّع للرئيسية، يتلوّن مع الصفحة)
   const navBrand = document.createElement('button');
   navBrand.className = 'nav-brand'; navBrand.title = 'Muhammed Elhuseyin'; navBrand.setAttribute('aria-label','الصفحة الرئيسية');
-  navBrand.innerHTML = '<svg viewBox="0 0 200 170" aria-hidden="true"><g fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">'
-    + '<path stroke="var(--accent)" d="M42,132 L42,44 L86,96 L130,44 L130,132"/>'
-    + '<path stroke="var(--accent-2)" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/></g></svg>';
-  navBrand.addEventListener('click', ()=> go(0));
+  navBrand.innerHTML = '<img src="assets/logo/mjh-logo.svg" alt="MJH" draggable="false">';
+  navBrand.addEventListener('click', ()=>{ onIndex ? go(0) : (location.href = 'index.html'); });
 
-  // روابط الصفحات
+  // روابط الصفحات (13)
   const navLinksWrap = document.createElement('div');
   navLinksWrap.className = 'nav-links';
   NAMES.forEach((nm,i)=>{
     const b = document.createElement('button');
     b.className = 'navlink'; b.textContent = nm; b.title = nm;
-    b.addEventListener('click', ()=> go(i));
+    b.addEventListener('click', ()=>{ onIndex ? go(i) : (location.href = 'index.html#p'+i); });
     navLinksWrap.appendChild(b);
   });
+  // رابط "من أنا" — آخر وحدة بالهيدر كامل (بعد كل شي، حتى بعد اللغة)، صفحة مستقلة حقيقية
+  const aboutLink = document.createElement('a');
+  aboutLink.className = 'navlink navlink-about'; aboutLink.textContent = 'من أنا'; aboutLink.title = 'من أنا';
+  aboutLink.href = 'about.html';
 
   // أيقونات التواصل
   const navContact = document.createElement('div');
@@ -97,11 +64,30 @@
   navLang.querySelectorAll('.langbtn').forEach(b=>
     b.addEventListener('click', ()=> window.applyLang && window.applyLang(b.dataset.lang)));
 
-  topnav.append(navBrand, navLinksWrap, navContact, navCv, navLang);
+  topnav.append(navBrand, navLinksWrap, aboutLink, navContact, navCv, navLang);
   document.body.appendChild(topnav);
+
+  // زر قائمة عائم (موبايل بوضعية طولية بس) — بيفتح/يسكّر كل محتويات الهيدر كلائحة عمودية، لسهولة
+  // التنقّل بدل السحب الأفقي الضيّق. بيعيد استخدام نفس أزرار الهيدر (روابط الصفحات + من أنا + تواصل
+  // + CV + لغة) بلا ما نكرّرها — بس بنبدّل تخطيطهم عبر CSS لمّا القائمة تنفتح.
+  const menuBtn = document.createElement('button');
+  menuBtn.id = 'menu-btn'; menuBtn.type = 'button'; menuBtn.setAttribute('aria-label','قائمة التنقّل');
+  menuBtn.innerHTML = '<span></span><span></span><span></span>';
+  menuBtn.addEventListener('click', ()=> document.body.classList.toggle('nav-menu-open'));
+  document.body.appendChild(menuBtn);
+  // سكّر القائمة تلقائياً أول ما تضغط أي رابط جواها
+  topnav.addEventListener('click', e=>{
+    if(e.target.closest('.navlink, .navlink-about')) document.body.classList.remove('nav-menu-open');
+  });
   const navlinks = [...navLinksWrap.children];
-  function updateNav(){ navlinks.forEach((b,i)=> b.classList.toggle('on', i===cur)); }
-  window.setNavLabels = (arr)=>{ navlinks.forEach((b,i)=>{ if(arr[i]) b.textContent=arr[i]; }); };
+  function updateNav(){
+    navlinks.forEach((b,i)=> b.classList.toggle('on', onIndex && i===cur));
+    aboutLink.classList.toggle('on', !onIndex);
+  }
+  window.setNavLabels = (arr, aboutText)=>{
+    navlinks.forEach((b,i)=>{ if(arr[i]) b.textContent=arr[i]; });
+    if(aboutText) aboutLink.textContent = aboutText;
+  };
   function hexRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
   function lighten(h,a){ const [r,g,b]=hexRgb(h),f=x=>Math.round(x+(255-x)*a); return `rgb(${f(r)},${f(g)},${f(b)})`; }
   function applyAccent(i){
@@ -110,99 +96,142 @@
     root.setProperty('--accent', hex);
     root.setProperty('--accent-2', lighten(hex,0.35));
     root.setProperty('--accent-soft', `rgba(${r},${g},${b},.16)`);
-    const glow = document.querySelector('.robot-glow');
-    if(glow) glow.style.background = `radial-gradient(circle,rgba(${r},${g},${b},.30),rgba(${r},${g},${b},.10) 45%,transparent 68%)`;
     window.currentAccent = hex;
     if(window.robotAccent) window.robotAccent(hex);   // توهّج الروبوت
   }
-  // التنقّل دائماً أفقي: الصفحة الجديدة تدخل من اليمين (والرجوع يعكسها)
-  const fwd = 'translateX(100%)';    // الجديدة تبدأ من اليمين وتزحف للوسط
-  const bwd = 'translateX(-100%)';   // والقديمة تخرج لليسار
 
-  /* ===== الوضع الابتدائي ===== */
-  pages.forEach((p,i)=>{
-    p.classList.toggle('active', i===0);
-    p.style.transform = i===0 ? 'none' : 'translateX(100%)';
-  });
-  document.body.classList.add('at-home');
   applyAccent(0);
   updateNav();
+  if(onIndex) document.body.classList.add('at-home');
 
+  // التمرير لقسم معيّن (بدل تقليب الصفحات القديم)
   function go(target){
-    if(lock || target<0 || target>=n || target===cur) return;
-    lock = true;
-    const forward = target > cur;
-    const newStart = forward ? fwd : bwd;
-    const oldEnd   = forward ? bwd : fwd;
-    const oldEl = pages[cur], newEl = pages[target];
-
-    newEl.classList.add('active');
-    newEl.style.transition = 'none';
-    newEl.style.transform  = newStart;
-    void newEl.offsetWidth;
-    newEl.style.transition = '';
-    newEl.style.transform  = 'none';
-    oldEl.style.transform  = oldEnd;
-
-    const prev = cur;
-    cur = target;
-    document.body.classList.toggle('at-home', cur===0);
-    document.body.classList.toggle('on-playground', cur===14);
-    if(cur===14 && window.initPlayground) window.initPlayground();
-    applyAccent(cur);
-    updateNav();
-    typeCode(cur);                                   // ابدأ كتابة الكود للصفحة الجديدة
-    if(window.robotPage) window.robotPage(cur);
-
-    setTimeout(()=>{ pages[prev].classList.remove('active'); lock=false; }, DUR);
+    if(!onIndex || target<0 || target>=n) return;
+    pages[target].scrollIntoView({ behavior:'smooth', block:'start' });
   }
-  const next = ()=> go(cur+1);
-  const prev = ()=> go(cur-1);
 
-  // طول ما في مودال مفتوح، نوقف تنقّل الموقع (السكرول للمودال بس)
-  const uiBlocked = ()=> document.body.classList.contains('modal-open');
+  // سهم عائم صغير يمين الشاشة — يرجّع للهيرو (يظهر بس لمّا نبعد عنه)
+  if(onIndex){
+    const upBtn = document.createElement('button');
+    upBtn.id = 'to-top'; upBtn.setAttribute('aria-label','ارجع للأعلى'); upBtn.title = 'ارجع للأعلى';
+    upBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 5l-7 7h4v7h6v-7h4z" fill="currentColor"/></svg>';
+    upBtn.addEventListener('click', ()=> go(0));
+    document.body.appendChild(upBtn);
+  }
 
-  // عجلة الماوس — لو المستخدم عم يمرّر جوّا صندوق نص طويل (متل صفحة "من أنا") ولسا فيه مجال، منسيبه يتمرّر عادي بدل ما نبدّل صفحة
-  let wheelReady = 0;
-  addEventListener('wheel', (e)=>{
-    if(uiBlocked()) return;
-    const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if(Math.abs(d) < 10) return;
-    const scrollBox = e.target.closest('.about-scroll');
-    if(scrollBox){
-      const canDown = scrollBox.scrollTop + scrollBox.clientHeight < scrollBox.scrollHeight - 1;
-      const canUp   = scrollBox.scrollTop > 0;
-      if((d>0 && canDown) || (d<0 && canUp)) return;   // بيتمرّر داخل الصندوق طبيعياً، بلا تبديل صفحة
-    }
-    const now = Date.now(); if(now < wheelReady) return;
-    wheelReady = now + DUR + 120;
-    d > 0 ? next() : prev();
-  }, { passive:true });
-
-  // الكيبورد
-  addEventListener('keydown', (e)=>{
-    if(uiBlocked()) return;
-    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); next(); }
-    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  // ===== تلاشي كل سطر/عنصر بالمحتوى لحاله مع السكرول — مش مربوط بوصول القسم كامل، يعني
+  // بيبلّش يتلاشى أول ما يقرب من الشاشة حتى لو لسا داخل نفس القسم. شغّال بـ index.html وabout.html سوا. =====
+  // #about-sections (بصفحة "من أنا") مجرّد غلاف — منفكّه لعناصره (كل قسم مرقّم لحاله) بدل ما يتلاشى كتلة وحدة
+  const revealEls = [];
+  document.querySelectorAll('.panel > *').forEach(el=>{
+    if(el.id === 'about-sections') el.querySelectorAll(':scope > .about-sec').forEach(sec=> revealEls.push(sec));
+    else revealEls.push(el);
   });
+  revealEls.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.transitionDelay = Math.min(i*55, 260) + 'ms';
+  });
+  function updateReveal(){
+    // آخر عناصر آخر قسم (متل معلومات التواصل) ممكن يوصلوا آخر نقطة سكرول ممكنة بالصفحة
+    // وما يدخلوا نطاق المنتصف أبداً — إذا وصلنا فعلاً لآخر الصفحة، نظهرهم كلهم بالإجبار
+    const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    revealEls.forEach(el=>{
+      const r = el.getBoundingClientRect();
+      // نطاق ظهور أضيق (وسط الشاشة) — يخلي التلاشي دخول وخروج واضح وملموس وانت عم تنزل أو تطلع
+      const shown = atBottom || (r.top < innerHeight*0.82 && r.bottom > innerHeight*0.16);
+      el.classList.toggle('in-view', shown);
+    });
+  }
 
-  // اللمس — نفس منطق العجلة: لو اللمس بلّش جوّا صندوق نص طويل ولسا فيه مجال، منسيبه يتمرّر عادي بدل ما نبدّل صفحة
-  let sx=0, sy=0, sBox=null;
-  addEventListener('touchstart', e=>{
-    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
-    sBox = e.target.closest ? e.target.closest('.about-scroll') : null;
-  }, {passive:true});
-  addEventListener('touchend', e=>{
-    if(uiBlocked()) return;
-    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-    if(Math.max(Math.abs(dx),Math.abs(dy)) < 40) return;
-    if(sBox && Math.abs(dy) >= Math.abs(dx)){
-      const canDown = sBox.scrollTop + sBox.clientHeight < sBox.scrollHeight - 1;
-      const canUp   = sBox.scrollTop > 0;
-      if((dy<0 && canDown) || (dy>0 && canUp)) return;   // لسا في مجال يتمرّر جوّا الصندوق نفسه
+  if(!onIndex){
+    // بصفحة "من أنا" بس: نفكّك النصوص الطويلة (الاقتباس + فقرات القصة + الخاتمة) لأسطرها البصرية
+    // الفعلية حتى كل سطر يتلاشى لحاله بالسكرول، مش النص كامل دفعة وحدة زي باقي الصفحة.
+    // بنحسب الأسطر بقياس offsetTop لكل كلمة (نفس القيمة = نفس السطر) — بيتغيّر مع عرض الشاشة
+    // فلازم نعيد البناء عند أي resize.
+    function splitToLines(el){
+      if(!el.dataset.origText) el.dataset.origText = el.textContent.trim();
+      const words = el.dataset.origText.split(/\s+/).filter(Boolean);
+      if(!words.length) return;
+      el.innerHTML = words.map(w=>'<span class="rl-w">'+w+'</span>').join(' ');
+      const wordEls = [...el.querySelectorAll('.rl-w')];
+      const lines = []; let lastTop = null;
+      wordEls.forEach(w=>{
+        const top = w.offsetTop;
+        if(lastTop===null || Math.abs(top-lastTop)>3){ lines.push([]); lastTop = top; }
+        lines[lines.length-1].push(w.textContent);
+      });
+      el.innerHTML = lines.map(line=>'<span class="reveal-line">'+line.join(' ')+'</span>').join(' ');
     }
-    (Math.abs(dx) > Math.abs(dy)) ? (dx<0?next():prev()) : (dy<0?next():prev());
-  }, {passive:true});
+    function buildRevealEls(){
+      revealEls.length = 0;
+      document.querySelectorAll('.panel > *').forEach(el=>{
+        if(el.id === 'about-sections') el.querySelectorAll(':scope > .about-sec').forEach(sec=> revealEls.push(sec));
+        else revealEls.push(el);
+      });
+      revealEls.forEach((el,i)=>{
+        el.classList.add('reveal');
+        el.style.transitionDelay = Math.min(i*55, 260) + 'ms';
+      });
+      // هلق نفكّك النصوص الطويلة جوّا العناصر أعلاه لأسطرها، وكل سطر بيصير عنصر متابَع لحاله
+      const lineTargets = [...document.querySelectorAll('.about-quote, .about-sec-body p, .about-closing p')];
+      lineTargets.forEach(splitToLines);
+      document.querySelectorAll('.reveal-line').forEach((el,i)=>{
+        el.classList.add('reveal');
+        el.style.transitionDelay = Math.min((i%10)*50, 260) + 'ms';
+        revealEls.push(el);
+      });
+    }
+    buildRevealEls();
+    updateReveal();
+    let t2=false;
+    addEventListener('scroll', ()=>{ if(t2) return; t2=true; setTimeout(()=>{ updateReveal(); t2=false; },60); }, {passive:true});
+    let t3=false;
+    addEventListener('resize', ()=>{ if(t3) return; t3=true; setTimeout(()=>{ buildRevealEls(); updateReveal(); t3=false; },150); });
+    addEventListener('load', updateReveal);
+    window.navGo = go; return;   // صفحة مستقلة (about.html) — خلص هون، مافي أقسام تتراقب
+  }
 
-  window.navGo = go;
+  // لو وصلنا من صفحة تانية برابط #pN (من زر بصفحة about.html)، انزل للقسم المطلوب
+  if(location.hash && /^#p\d+$/.test(location.hash)){
+    const idx = parseInt(location.hash.slice(2),10);
+    if(pages[idx]) setTimeout(()=> pages[idx].scrollIntoView({block:'start'}), 60);
+  }
+
+  // ===== تلاشي دخول/خروج الكتابات مع السكرول — نحسبها يدوياً بـ scroll+timer (مش IntersectionObserver
+  // ولا requestAnimationFrame، يلي ممكن يتجمّدوا بتابات مش فوكس). الشخصية (#robot-container) برّا
+  // هالنظام كلياً وثابتة ظاهرة طول الوقت بكل الصفحات. =====
+  function updateVisibility(){
+    let bestI = 0, bestDist = Infinity;
+    const mid = innerHeight/2;
+    pages.forEach((p,i)=>{
+      const r = p.getBoundingClientRect();
+      const shown = r.bottom > innerHeight*0.1 && r.top < innerHeight*0.9;
+      p.classList.toggle('in-view', shown);
+      const d = Math.abs(r.top + r.height/2 - mid);
+      if(d < bestDist){ bestDist = d; bestI = i; }
+    });
+    // آخر قسم (تواصل) ممكن يكون أقصر من الشاشة فما توصل نص الشاشة أبداً — إذا وصلنا لآخر السكرول فعلاً، نعتبره هو الحالي
+    if(innerHeight + scrollY >= document.documentElement.scrollHeight - 2) bestI = n-1;
+    // الشخصية ما بتظهر إلا لمّا الهيرو (أول قسم) يختفي تقريباً بالكامل من الشاشة (مش بس أول ما نبعد عنه)
+    if(pages[0]){
+      const heroGone = pages[0].getBoundingClientRect().bottom < innerHeight*0.08;
+      document.body.classList.toggle('hero-gone', heroGone);
+    }
+    updateReveal();
+    if(bestI !== cur){
+      cur = bestI;
+      document.body.classList.toggle('at-home', cur===0);
+      applyAccent(cur);
+      updateNav();
+      if(window.robotPage) window.robotPage(cur);
+    }
+  }
+  let ticking = false;
+  addEventListener('scroll', ()=>{
+    if(ticking) return; ticking = true;
+    setTimeout(()=>{ updateVisibility(); ticking = false; }, 60);
+  }, { passive:true });
+  addEventListener('resize', updateVisibility);
+  updateVisibility();
+  addEventListener('load', updateVisibility);
 })();

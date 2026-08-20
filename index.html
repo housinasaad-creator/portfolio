@@ -3,13 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+// بوضعية عرضية (landscape) وعرض شاشة حقيقي أضيق من 1280 (هاتف بالعرض)، منخلي المتصفح يتعامل مع
+// الصفحة وكأنها بعرض 1280 — نفس تقنية "طلب نسخة سطح المكتب". هيك innerWidth ووحدات vw كلها بتحسب
+// تلقائياً على أساس 1280 (بالضبط متل الكمبيوتر). المتصفح ما بيصغّر بصرياً النتيجة تلقائياً لمّا نغيّر
+// الـmeta ديناميكياً بعد التحميل (جرّبناها: الطول صار صح بس بلا تصغير بصري = تكبير وتراكب) — فلازم
+// نحسب ونفرض نسبة التصغير (initial-scale) يدوياً بنفسنا = عرض الشاشة الحقيقي ÷ 1280.
+(function(){
+  var META_W = 1280;
+  // مصدر "العرض الحقيقي": screen.width الأساسي (ثابت، ما بيتأثر بتعديلاتنا عالـmeta) — بس بعض
+  // المتصفحات بترجعه 0 لحظة أول تشغيل قبل ما يجهز، فمنستعمل innerWidth كبديل احتياطي وقتها،
+  // ومنتأكّد الرقم النهائي منطقي (بين 100 و1280) قبل ما نستعمله أبداً — تفادياً لـinitial-scale=0
+  // (يلي المتصفح بيعتبره غير صالح وبيرجع لقيمة افتراضية غلط، وده سبب ظهور كل شي مكبّر ومتراكب).
+  function realWidth(){
+    var w = screen.width || innerWidth;
+    if(!w || w < 100 || w > 4000) w = innerWidth;
+    return w;
+  }
+  function apply(){
+    var meta = document.querySelector('meta[name="viewport"]');
+    var landscape = matchMedia('(orientation:landscape)').matches;
+    var rw = realWidth();
+    var need = landscape && rw > 0 && rw < META_W;
+    var want;
+    if(need){
+      var scale = rw / META_W;
+      if(scale > 0 && scale <= 1){
+        want = 'width='+META_W+', initial-scale='+scale+', minimum-scale='+scale+', maximum-scale='+scale+', user-scalable=no';
+      } else {
+        want = 'width=device-width, initial-scale=1';
+      }
+    } else {
+      want = 'width=device-width, initial-scale=1';
+    }
+    if(meta.getAttribute('content') !== want){
+      meta.setAttribute('content', want);
+      // نستنى فريمين حتى المتصفح يعيد حساب innerWidth/vw فعلياً قبل ما نبلّغ باقي الكود
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ dispatchEvent(new Event('logical-resize')); }); });
+    }
+  }
+  apply();
+  addEventListener('resize', apply);
+  addEventListener('orientationchange', apply);
+  window.__applyViewportMode = apply;
+})();
+</script>
 <title>Muhammed Elhuseyin — مبرمج ومهندس ذكاء صناعي</title>
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=30">
+<link rel="stylesheet" href="css/style.css?v=105">
 
 <script type="importmap">
 {
@@ -22,34 +67,30 @@
 </head>
 <body>
 
-  <video id="bg-video" autoplay muted loop playsinline poster="assets/video/bg-poster.jpg">
-    <source src="assets/video/bg.mp4" type="video/mp4">
-  </video>
-  <div class="bg-dim"></div>
+  <div class="scene-bg"></div>
   <div id="robot-container"><div class="robot-glow"></div></div>
   <div class="vignette"></div>
 
   <main id="pages">
 
     <!-- 1 · الرئيسية -->
-    <section class="page">
+    <section class="page home-page">
+      <video class="hero-video" autoplay muted loop playsinline poster="assets/video/hacker-room-poster.jpg">
+        <source src="assets/video/hacker-room.mp4" type="video/mp4">
+      </video>
+      <div class="hero-logo-card">
+        <img class="hero-logo" src="assets/logo/mjh-logo.svg" alt="MJH" draggable="false">
+      </div>
       <div class="panel">
-        <svg class="home-logo" viewBox="0 0 200 170" aria-label="Muhammed Elhuseyin">
-          <g fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="var(--accent)"   d="M42,132 L42,44 L86,96 L130,44 L130,132"/>
-            <path stroke="var(--accent-2)" d="M112,44 L112,132 M160,44 L160,132 M112,88 L160,88"/>
-          </g>
-        </svg>
         <div class="home-name">Muhammed<br>Elhuseyin</div>
         <div class="home-role">&lt; مبرمج ومهندس ذكاء صناعي /&gt;</div>
-        <p class="home-bio">من 6 سنين عم برمج. ببني مواقع وتطبيقات وأنظمة ذكية — من الواجهة اللي بتشوفها، للسيرفر ورا الكواليس، لنماذج الذكاء الصناعي. تحت معك 14 محطة، كل وحدة بتحكي عن شي بعرفه منيح.</p>
+        <p class="home-bio">من 6 سنين عم برمج. ببني مواقع وتطبيقات وأنظمة ذكية — من الواجهة اللي بتشوفها، للسيرفر ورا الكواليس، لنماذج الذكاء الصناعي. تحت معك 13 محطة، كل وحدة بتحكي عن شي بعرفه منيح.</p>
         <div class="stats">
           <span><b data-count="6" data-prefix="+">+6</b> سنين خبرة</span>
           <span>تطوير ويب</span>
           <span>تطبيقات Flutter</span>
           <span>ذكاء صناعي</span>
         </div>
-        <a class="cv-dl cv-full cv-btn" download href="cv/CV_Muhammed_Elhuseyin_AR.pdf">⬇ السيرة الذاتية</a>
         <div class="socials">
           <a class="social" href="https://wa.me/905050144543" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/whatsapp)"></i></a>
           <a class="social" href="https://www.instagram.com/mjh.6_6" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/instagram)"></i></a>
@@ -59,28 +100,25 @@
       </div>
     </section>
 
-    <!-- 2 · من أنا -->
-    <section class="page about-page">
-      <div class="panel about-panel">
-        <span class="kicker">02 · من أنا</span>
-        <div class="arname about-subtitle">قصة قبل الكود</div>
-        <div class="about-scroll">
-          <div class="about-text">
-            <p>اسمي محمد الحسين، من مواليد مدينة تدمر — عروس الصحراء — في محافظة حمص، سوريا. حملت من طفولتي فضولاً لا يهدأ: لماذا يفعل هذا الزرّ ما يفعله؟ وكيف صُنع؟ كان هذا السؤال بذرة رحلتي مع الحاسوب، قبل أن تُقسّم الحرب الطريق وتُبعثر الخطى.</p>
-            <p>في عام 2015 غادرت سوريا إلى تركيا، هرباً من احتدام الأوضاع، حاملاً معي فضولي ذاك، وإن كان الطريق إلى عمق البرمجة قد تأخّر بفعل الظروف.</p>
-            <p>في تلك السنة نفسها بدأت قصة حبٍّ امتدت خمس سنوات، حتى عام 2020، حين اختارت من أحببتها طريقاً آخر — الزواج بمن قدّم لها استقراراً مادياً لم أكن أملكه حينها. لم يكن الأمر سهلاً؛ سقطت في اكتئاب طويل، لكنه — من غير أن أدري — كان نقطة التحوّل الحقيقية في حياتي.</p>
-            <p>هربت من الواقع نحو شاشة الحاسوب، فوجدت نفسي أغرق في بحر من المعلومات، أسأل: كيف بُني هذا؟ وكيف أبنيه أنا؟ سؤال يقود إلى سؤال، حتى تحوّلت ساعات الهروب إلى سنوات من الشغف والبناء، وصولاً إلى ما أنا عليه اليوم.</p>
-            <p>أعرف يقيناً أنها لو رأت اليوم ما وصلت إليه — هذا الشغف، هذا الطموح — لتردّدت. وربما، من بعيد، تراقب الآن ما آل إليه الأمر. مهما يكن، أشكرها: فلولا أنها لم تخترني، لما وصلت إلى ما أنا عليه اليوم.</p>
-            <p>اليوم، أقضي معظم وقتي خلف حاسوبي: أكتب الشيفرات، أدرّب نماذج الذكاء الاصطناعي، وأتعلّم كل يوم شيئاً جديداً.</p>
-          </div>
-          <div class="about-quote">أنا أهندس المستقبل، أدرّب الذكاء لأصنع العقول، وأكتب الشيفرات لأحرّك العالم... فمن أنتِ في عالمٍ أنا من يخطّ تفاصيله؟</div>
-          <p class="about-extra">وبعيداً عن الشاشة: أحبّ الأنمي، وأتابع «المحقّق كونان» باستمرار، وشخصيتي المفضّلة هي أكاي شويتشي. أحب كرة القدم، وأميل للعزلة أكثر من الثرثرة — أجلس ساعاتٍ طويلة خلف حاسوبي، أنسى أحياناً موعد نومي، وأنسى نفسي في العالم الذي أبنيه.</p>
-          <div class="tags"><span>أنمي</span><span>المحقّق كونان</span><span>أكاي شويتشي</span><span>كرة القدم</span></div>
-        </div>
-      </div>
-    </section>
+    <!-- فاصل موجة أخضر بين الهيرو وبداية الأقسام — برموز برمجة شفافة بيج فوقه -->
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 46" preserveAspectRatio="none">
+        <path class="hw-fill" d="M0,25 C360,36 480,13 720,21 C960,29 1080,10 1440,22 L1440,46 L0,46 Z"/>
+        <g class="hw-glyphs">
+          <text x="70"  y="30">{ }</text>
+          <text x="240" y="20">&lt;/&gt;</text>
+          <text x="420" y="28">( )</text>
+          <text x="600" y="16">;</text>
+          <text x="760" y="26">,</text>
+          <text x="900" y="18">{ }</text>
+          <text x="1060" y="24">( )</text>
+          <text x="1220" y="16">&lt;/&gt;</text>
+          <text x="1370" y="26">;</text>
+        </g>
+      </svg>
+    </div>
 
-    <!-- 3 · HTML -->
+    <!-- 2 · HTML -->
     <section class="page">
       <div class="panel">
         <div class="lang-head">
@@ -248,37 +286,25 @@
           <a class="social" href="https://www.facebook.com/share/1FGM8Z6WL1/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/facebook)"></i></a>
           <a class="social" href="https://github.com/housinasaad-creator" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="social-icon" style="--i:url(https://cdn.simpleicons.org/github)"></i></a>
         </div>
-      </div>
-    </section>
-
-    <!-- 15 · Playground -->
-    <section class="page playground-page">
-      <div class="pg-stage"><canvas id="pg-canvas"></canvas><div class="pg-loading">…</div></div>
-      <div class="panel pg-panel">
-        <span class="kicker">15 · اللعب</span>
-        <h2 class="page-title">Playground</h2>
-        <div class="arname">اللعب مع روبوت الذكاء — محمد الحسين</div>
-        <div class="page-desc pg-hint">اسحب بالماوس لتدوير الشخصية · اضغط أي حركة لتنفّذها</div>
-        <div class="pg-anims"></div>
-        <div class="pg-mobile">افتح الموقع على الكمبيوتر لتجربة الشخصية ثلاثية الأبعاد كاملة.</div>
+        <div class="contact-brand">
+          <img class="panel-logo" src="assets/logo/mjh-logo.svg" alt="MJH" draggable="false">
+          <p class="contact-tagline">شغف بلا حدود، بالكود كتبت حكايتي، وبفخر بعيشها.</p>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- مؤشّر السكرول -->
-  <div class="scroll-hint">مرّر للاستكشاف<span class="arrow">›</span></div>
 
   <!-- المؤشّر المخصّص -->
   <div id="cring"></div>
   <div id="cdot"></div>
 
-  <script src="js/cursor.js?v=30"></script>
-  <script src="js/fx.js?v=30"></script>
-  <script src="js/projects.js?v=30"></script>
-  <script src="js/playground.js?v=30"></script>
-  <script src="js/nav.js?v=30"></script>
-  <script src="js/i18n.js?v=30"></script>
-  <script type="module" src="js/robot.js?v=30"></script>
+  <script src="js/cursor.js?v=56"></script>
+  <script src="js/fx.js?v=56"></script>
+  <script src="js/projects.js?v=56"></script>
+  <script src="js/nav.js?v=69"></script>
+  <script src="js/i18n.js?v=62"></script>
+  <script type="module" src="js/robot.js?v=146"></script>
 </body>
 </html>
