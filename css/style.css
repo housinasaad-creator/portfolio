@@ -16,7 +16,12 @@
   --muted-invert:#c9c3b2;
   --line:rgba(34,29,21,.14);
   --line-invert:rgba(245,240,226,.14);
+  --vv-offset-x:0px;   /* فرق أفقي بين الـvisual viewport والـlayout viewport — يُحسب بـindex.html/about.html */
 }
+/* بعض المتصفحات (خصوصاً بوضعية عرضية مع initial-scale مفروض يدوياً) بتخلّي الـvisual viewport
+   منزاح أفقياً عن الـlayout viewport، فالعناصر fixed (الهيدر، الخلفية الثابتة) بتبين منزاحة عن
+   حافة الشاشة الحقيقية. منعوّض هالانزياح بـtransform (منقرأه لايف من visualViewport.offsetLeft). */
+.vv-fixed{transform:translateX(var(--vv-offset-x))}
 
 *{box-sizing:border-box;margin:0;padding:0}
 /* overflow-x:hidden كانت عم "ترقّي" overflow-y تلقائياً لـauto (قاعدة بمعيار CSS: إذا حدّدت محور وحيد
@@ -49,12 +54,23 @@ body.hero-gone .scene-bg{opacity:1}
 #robot-container{position:fixed;inset:0;z-index:1;opacity:0;transform:scale(.93);
   transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
 body.robot-ready.hero-gone #robot-container{opacity:1;transform:none}
-/* موبايل بوضعية طولية بس — الشخصية مش ضرورية هون، بلاش نعرضها إطلاقاً (بالعرضية الموقع نسخة
-   طبق الأصل عن الكمبيوتر، الشخصية بتضل ظاهرة هناك عادي) */
-@media (max-width:768px) and (orientation:portrait){
+/* أي جهاز لمس (موبايل/تابلت، بغض النظر عن الاتجاه) — الشخصية ثلاثية الأبعاد ودوائر حركاتها ما
+   بتنعرض، منستبدلهم بلوغو ثابت (#mobile-char-logo تحت). ما بينفع نعتمد على max-width هون لأنه
+   بالوضعية العرضية الموقع بيتعامل مع نفسه وكأنه بعرض 1280 (نسخة كمبيوتر)، فmax-width ما بيفرّق. */
+@media (hover:none){
   #robot-container, #anim-dots{display:none !important}
 }
 #robot-container canvas{display:block;position:relative;z-index:1}
+/* ===== لوغو بديل عن الشخصية على أجهزة اللمس — نفس أسلوب لوغو صفحة "من أنا" ===== */
+#mobile-char-logo{display:none;position:fixed;top:50%;right:clamp(20px,4vw,54px);z-index:1;
+  transform:translateY(-50%);opacity:0;pointer-events:none;
+  height:clamp(150px,30vh,300px);width:auto;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.85)) drop-shadow(0 0 40px rgba(0,0,0,.7));
+  transition:opacity 1.1s ease}
+@media (hover:none){
+  #mobile-char-logo{display:block}
+  body.hero-gone #mobile-char-logo{opacity:1}
+}
 .robot-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(circle at 70% 50%, rgba(224,187,133,.8) 0%, rgba(224,187,133,.55) 10%, rgba(224,187,133,.22) 20%, transparent 30%)}
 .vignette{display:none}   /* الظل الغامق حوالين الشاشة اتشال بطلب المستخدم */
@@ -175,7 +191,7 @@ body.lang-rtl .navlink{font-size:13.5px}
 .home-logo path{transition:stroke .5s ease}
 .home-name{
   font-family:'Space Grotesk',sans-serif;direction:ltr;text-align:left;
-  font-weight:700;font-size:clamp(52px,10vw,108px);color:var(--text);line-height:1.0;
+  font-weight:700;font-size:clamp(52px,10vw,108px);color:var(--text-invert);line-height:1.0;
   animation:appear .9s ease-out both;
 }
 .home-role{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:clamp(17px,2.8vw,24px);margin-top:14px;letter-spacing:.5px;direction:ltr;text-align:left}
@@ -191,7 +207,8 @@ body.lang-rtl .navlink{font-size:13.5px}
 .about-page{align-items:flex-start !important;padding-top:100px !important}
 .about-panel{max-width:640px;position:relative;z-index:1}
 .about-page .kicker{font-size:20px}
-.about-subtitle{margin-top:6px;font-size:clamp(36px,5.2vw,54px);font-weight:700;color:var(--text);font-family:'Space Grotesk',sans-serif}
+.about-panel .about-subtitle{margin-top:6px;font-size:clamp(36px,5.2vw,54px);font-weight:700;color:var(--text-invert);font-family:'Space Grotesk',sans-serif;
+  text-shadow:0 2px 4px rgba(0,0,0,.85),0 0 14px rgba(0,0,0,.65)}
 .about-scroll{margin-top:10px}
 .about-text p{color:var(--muted);font-size:clamp(20px,2.6vw,24px);line-height:1.85;margin-bottom:14px;text-align:justify}
 .about-text p:last-child{margin-bottom:0}
@@ -212,7 +229,8 @@ body.lang-rtl .navlink{font-size:13.5px}
 /* ===== اقتباس الافتتاح — علامة تنصيص كبيرة زخرفية + نص بارز ===== */
 .about-quote{position:relative;margin:22px 0 40px;padding:8px 34px;
   font-family:'Space Grotesk',sans-serif;font-weight:700;
-  font-size:clamp(24px,3.2vw,32px);line-height:1.75;color:var(--text)}
+  font-size:clamp(24px,3.2vw,32px);line-height:1.75;color:var(--text-invert);
+  text-shadow:0 2px 4px rgba(0,0,0,.85),0 0 14px rgba(0,0,0,.65)}
 .about-quote::before{content:'“';position:absolute;top:-26px;right:-6px;
   font-family:Georgia,serif;font-size:88px;line-height:1;color:var(--accent-soft);z-index:-1}
 body.lang-ltr .about-quote::before{right:auto;left:-6px}
@@ -432,8 +450,8 @@ body.lang-rtl .panel{direction:rtl}
   background:linear-gradient(120deg,var(--accent),var(--accent-2));transition:transform .25s,box-shadow .25s}
 .contact-btn:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(201,151,95,.4)}
 .contact-alt{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:12px;
-  font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);text-decoration:none;
-  border:1px solid var(--line);transition:.25s}
+  font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-invert);text-decoration:none;
+  border:1px solid var(--line-invert);transition:.25s;text-shadow:0 2px 4px rgba(0,0,0,.7)}
 .contact-alt:hover{border-color:var(--accent);color:var(--accent)}
 /* أزرار السيرة الذاتية */
 .cv-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:11px 20px;border-radius:12px;cursor:none;

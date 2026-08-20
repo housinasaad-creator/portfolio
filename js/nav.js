@@ -22,7 +22,7 @@
 
   // ===== هيدر علوي زجاجي ثابت: لوغو · صفحات بالنص · من أنا (آخر وحدة) · تواصل + CV + لغة =====
   const topnav = document.createElement('nav');
-  topnav.id = 'topnav'; topnav.setAttribute('aria-label','التنقّل');
+  topnav.id = 'topnav'; topnav.className = 'vv-fixed'; topnav.setAttribute('aria-label','التنقّل');
 
   // اللوغو الأساسي بالهيدر (يرجّع للرئيسية، يتلوّن مع الصفحة)
   const navBrand = document.createElement('button');
