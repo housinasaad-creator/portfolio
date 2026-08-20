@@ -156,6 +156,12 @@ body.lang-rtl .navlink{font-size:13.5px}
 /* المحتوى على اليسار (توسيط عمودي فقط) — متل ما كان */
 .panel{pointer-events:auto;text-align:left;max-width:560px;direction:rtl}
 
+/* تلاشي دخول تدريجي لعناصر كل صفحة — opacity + إزاحة بسيطة بس (بلا scale، أخف عالمعالجة)،
+   بعدد عناصر معقول (أولاد .panel، مش كل سطر لحاله) */
+.reveal{opacity:0;transform:translateY(26px);
+  transition:opacity .55s ease-out,transform .55s ease-out}
+.reveal.in-view{opacity:1;transform:none}
+
 /* ===== فيديو خلفية الهيرو (الرئيسية بس) — خفيف وشفاف، يتلاشى تحت الروبوت يميناً ===== */
 /* height ثابت (مش min-height) — الهيرو لازم يضل بالضبط شاشة وحدة. min-height كانت بتخلي align-items:center
    (تبع .page) يوسّط المحتوى بصندوق أطول من الشاشة، فبيطلع فراغ كبير تحت المحتوى قبل الموجة. overflow-y:auto
@@ -165,16 +171,6 @@ body.lang-rtl .navlink{font-size:13.5px}
 .home-page{overflow-x:hidden;overflow-y:auto;height:100vh;background:#0b0f17}
 .hero-video{position:absolute;top:0;left:0;z-index:0;width:100%;height:100%;object-fit:cover;opacity:.3;
   filter:grayscale(.8) brightness(.85) contrast(1.05)}
-/* لوغو كبير فوق الفيديو، بنص ارتفاع الهيرو تقريباً، طرف اليمين وبمنتصف الارتفاع عمودياً —
-   بلا بطاقة خلفه، بس ظل قوي حتى يبين واضح فوق الفيديو */
-.hero-logo-card{position:absolute;top:50%;right:clamp(20px,4vw,54px);z-index:1;
-  transform:translateY(-50%);
-  display:flex;align-items:center;justify-content:center}
-.hero-logo{display:block;height:clamp(220px,46vh,440px);width:auto;opacity:.95;
-  filter:drop-shadow(0 6px 10px rgba(0,0,0,.85)) drop-shadow(0 0 40px rgba(0,0,0,.7))}
-/* موبايل بوضعية طولية: ما في مجال كافي للوغو الكبير جنب الكلام — بيصير يتراكب معه، فبنشيله (بالعرضية
-   ضل ظاهر عادي، الموقع هناك نسخة طبق الأصل عن الكمبيوتر) */
-@media (max-width:768px) and (orientation:portrait){ .hero-logo-card{display:none} }
 /* هيدر الموبايل ثابت (fixed) فوق الشاشة — لازم مسافة كافية فوق كل صفحة حتى ما يقصّ أول سطر (الاسم بالهيرو مثلاً) */
 @media (max-width:768px) and (orientation:portrait){ .page{padding-top:78px} }
 /* بلا بطاقة حوالين كلام الهيرو — ظل نصّي قوي وواضح بدل هيك حتى يضل مقروء فوق الفيديو مهما كانت خلفيته */

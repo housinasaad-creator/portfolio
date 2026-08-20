@@ -119,7 +119,32 @@
     document.body.appendChild(upBtn);
   }
 
+  // ===== تلاشي دخول تدريجي لعناصر كل صفحة مع السكرول — خفيف (opacity + إزاحة بسيطة بس، بلا scale)
+  // وبعدد عناصر معقول (أولاد .panel المباشرين، و#about-sections بينفكّ لأقسامه المرقّمة فقط —
+  // بلا تفكيك كل سطر لحاله متل قبل، هيك كان اللي بيسبّب لاغ محسوس فعلياً). =====
+  const revealEls = [];
+  document.querySelectorAll('.panel > *').forEach(el=>{
+    if(el.id === 'about-sections') el.querySelectorAll(':scope > .about-sec').forEach(sec=> revealEls.push(sec));
+    else revealEls.push(el);
+  });
+  revealEls.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.transitionDelay = Math.min(i*60, 300) + 'ms';
+  });
+  function updateReveal(){
+    const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    revealEls.forEach(el=>{
+      const r = el.getBoundingClientRect();
+      const shown = atBottom || (r.top < innerHeight*0.85 && r.bottom > innerHeight*0.1);
+      el.classList.toggle('in-view', shown);
+    });
+  }
+
   if(!onIndex){
+    updateReveal();
+    let t2=false;
+    addEventListener('scroll', ()=>{ if(t2) return; t2=true; setTimeout(()=>{ updateReveal(); t2=false; },80); }, {passive:true});
+    addEventListener('resize', updateReveal);
     window.navGo = go; return;   // صفحة مستقلة (about.html) — خلص هون، مافي أقسام تتراقب
   }
 
@@ -149,6 +174,7 @@
       const heroGone = pages[0].getBoundingClientRect().bottom < innerHeight*0.08;
       document.body.classList.toggle('hero-gone', heroGone);
     }
+    updateReveal();
     if(bestI !== cur){
       cur = bestI;
       document.body.classList.toggle('at-home', cur===0);
