@@ -58,22 +58,12 @@ body.hero-gone .scene-bg{opacity:1}
   transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
 body.robot-ready.hero-gone #robot-container{opacity:1;transform:none}
 /* أي جهاز لمس (موبايل/تابلت، بغض النظر عن الاتجاه) — الشخصية ثلاثية الأبعاد ودوائر حركاتها ما
-   بتنعرض، منستبدلهم بلوغو ثابت (#mobile-char-logo تحت). ما بينفع نعتمد على max-width هون لأنه
-   بالوضعية العرضية الموقع بيتعامل مع نفسه وكأنه بعرض 1280 (نسخة كمبيوتر)، فmax-width ما بيفرّق. */
+   بتنعرض إطلاقاً (بلا بديل — بس خلفية المدينة). ما بينفع نعتمد على max-width هون لأنه بالوضعية
+   العرضية الموقع بيتعامل مع نفسه وكأنه بعرض 1280 (نسخة كمبيوتر)، فmax-width ما بيفرّق. */
 @media (hover:none){
   #robot-container, #anim-dots{display:none !important}
 }
 #robot-container canvas{display:block;position:relative;z-index:1}
-/* ===== لوغو بديل عن الشخصية على أجهزة اللمس — نفس أسلوب لوغو صفحة "من أنا" ===== */
-#mobile-char-logo{display:none;position:fixed;top:50%;right:clamp(20px,4vw,54px);z-index:1;
-  transform:translateY(-50%);opacity:0;pointer-events:none;
-  height:clamp(150px,30vh,300px);width:auto;
-  filter:drop-shadow(0 6px 10px rgba(0,0,0,.85)) drop-shadow(0 0 40px rgba(0,0,0,.7));
-  transition:opacity 1.1s ease}
-@media (hover:none){
-  #mobile-char-logo{display:block}
-  body.hero-gone #mobile-char-logo{opacity:1}
-}
 .robot-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(circle at 70% 50%, rgba(224,187,133,.8) 0%, rgba(224,187,133,.55) 10%, rgba(224,187,133,.22) 20%, transparent 30%)}
 .vignette{display:none}   /* الظل الغامق حوالين الشاشة اتشال بطلب المستخدم */
@@ -169,8 +159,10 @@ body.lang-rtl .navlink{font-size:13.5px}
 /* خلفية غامقة ثابتة تحت الفيديو — الفيديو شفاف (opacity .3) وبدون هالخلفية كانت طبقة --bg الكريمية
    (تبع body) بتبين من وراه وتطلع كطبقة لونية بيج فوق الهيرو. */
 .home-page{overflow-x:hidden;overflow-y:auto;height:100vh;background:#0b0f17}
-.hero-video{position:absolute;top:0;left:0;z-index:0;width:100%;height:100%;object-fit:cover;opacity:.3;
-  filter:grayscale(.8) brightness(.85) contrast(1.05)}
+/* filter (grayscale/brightness/contrast) كان مطبّق هون سابقاً — شلناه: فلترة فيديو شغّال بشكل مستمر
+   عملية مكلفة جداً عالمعالج/الرسوميات، خصوصاً عالموبايل، وبما إنه الفيديو أصلاً شفاف جداً (opacity .3)
+   الفرق البصري كان محدود مقابل كلفته. */
+.hero-video{position:absolute;top:0;left:0;z-index:0;width:100%;height:100%;object-fit:cover;opacity:.3}
 /* هيدر الموبايل ثابت (fixed) فوق الشاشة — لازم مسافة كافية فوق كل صفحة حتى ما يقصّ أول سطر (الاسم بالهيرو مثلاً) */
 @media (max-width:768px) and (orientation:portrait){ .page{padding-top:78px} }
 /* بلا بطاقة حوالين كلام الهيرو — ظل نصّي قوي وواضح بدل هيك حتى يضل مقروء فوق الفيديو مهما كانت خلفيته */
