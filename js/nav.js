@@ -119,75 +119,7 @@
     document.body.appendChild(upBtn);
   }
 
-  // ===== تلاشي كل سطر/عنصر بالمحتوى لحاله مع السكرول — مش مربوط بوصول القسم كامل، يعني
-  // بيبلّش يتلاشى أول ما يقرب من الشاشة حتى لو لسا داخل نفس القسم. شغّال بـ index.html وabout.html سوا. =====
-  // #about-sections (بصفحة "من أنا") مجرّد غلاف — منفكّه لعناصره (كل قسم مرقّم لحاله) بدل ما يتلاشى كتلة وحدة
-  const revealEls = [];
-  document.querySelectorAll('.panel > *').forEach(el=>{
-    if(el.id === 'about-sections') el.querySelectorAll(':scope > .about-sec').forEach(sec=> revealEls.push(sec));
-    else revealEls.push(el);
-  });
-  revealEls.forEach((el,i)=>{
-    el.classList.add('reveal');
-    el.style.transitionDelay = Math.min(i*55, 260) + 'ms';
-  });
-  function updateReveal(){
-    // آخر عناصر آخر قسم (متل معلومات التواصل) ممكن يوصلوا آخر نقطة سكرول ممكنة بالصفحة
-    // وما يدخلوا نطاق المنتصف أبداً — إذا وصلنا فعلاً لآخر الصفحة، نظهرهم كلهم بالإجبار
-    const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
-    revealEls.forEach(el=>{
-      const r = el.getBoundingClientRect();
-      // نطاق ظهور أضيق (وسط الشاشة) — يخلي التلاشي دخول وخروج واضح وملموس وانت عم تنزل أو تطلع
-      const shown = atBottom || (r.top < innerHeight*0.82 && r.bottom > innerHeight*0.16);
-      el.classList.toggle('in-view', shown);
-    });
-  }
-
   if(!onIndex){
-    // بصفحة "من أنا" بس: نفكّك النصوص الطويلة (الاقتباس + فقرات القصة + الخاتمة) لأسطرها البصرية
-    // الفعلية حتى كل سطر يتلاشى لحاله بالسكرول، مش النص كامل دفعة وحدة زي باقي الصفحة.
-    // بنحسب الأسطر بقياس offsetTop لكل كلمة (نفس القيمة = نفس السطر) — بيتغيّر مع عرض الشاشة
-    // فلازم نعيد البناء عند أي resize.
-    function splitToLines(el){
-      if(!el.dataset.origText) el.dataset.origText = el.textContent.trim();
-      const words = el.dataset.origText.split(/\s+/).filter(Boolean);
-      if(!words.length) return;
-      el.innerHTML = words.map(w=>'<span class="rl-w">'+w+'</span>').join(' ');
-      const wordEls = [...el.querySelectorAll('.rl-w')];
-      const lines = []; let lastTop = null;
-      wordEls.forEach(w=>{
-        const top = w.offsetTop;
-        if(lastTop===null || Math.abs(top-lastTop)>3){ lines.push([]); lastTop = top; }
-        lines[lines.length-1].push(w.textContent);
-      });
-      el.innerHTML = lines.map(line=>'<span class="reveal-line">'+line.join(' ')+'</span>').join(' ');
-    }
-    function buildRevealEls(){
-      revealEls.length = 0;
-      document.querySelectorAll('.panel > *').forEach(el=>{
-        if(el.id === 'about-sections') el.querySelectorAll(':scope > .about-sec').forEach(sec=> revealEls.push(sec));
-        else revealEls.push(el);
-      });
-      revealEls.forEach((el,i)=>{
-        el.classList.add('reveal');
-        el.style.transitionDelay = Math.min(i*55, 260) + 'ms';
-      });
-      // هلق نفكّك النصوص الطويلة جوّا العناصر أعلاه لأسطرها، وكل سطر بيصير عنصر متابَع لحاله
-      const lineTargets = [...document.querySelectorAll('.about-quote, .about-sec-body p, .about-closing p')];
-      lineTargets.forEach(splitToLines);
-      document.querySelectorAll('.reveal-line').forEach((el,i)=>{
-        el.classList.add('reveal');
-        el.style.transitionDelay = Math.min((i%10)*50, 260) + 'ms';
-        revealEls.push(el);
-      });
-    }
-    buildRevealEls();
-    updateReveal();
-    let t2=false;
-    addEventListener('scroll', ()=>{ if(t2) return; t2=true; setTimeout(()=>{ updateReveal(); t2=false; },60); }, {passive:true});
-    let t3=false;
-    addEventListener('resize', ()=>{ if(t3) return; t3=true; setTimeout(()=>{ buildRevealEls(); updateReveal(); t3=false; },150); });
-    addEventListener('load', updateReveal);
     window.navGo = go; return;   // صفحة مستقلة (about.html) — خلص هون، مافي أقسام تتراقب
   }
 
@@ -217,7 +149,6 @@
       const heroGone = pages[0].getBoundingClientRect().bottom < innerHeight*0.08;
       document.body.classList.toggle('hero-gone', heroGone);
     }
-    updateReveal();
     if(bestI !== cur){
       cur = bestI;
       document.body.classList.toggle('at-home', cur===0);

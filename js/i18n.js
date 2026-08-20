@@ -172,54 +172,6 @@
   }
   window.applyLang = applyLang;
 
-  // ===== نافذة "اقلب هاتفك" — بس عالموبايل وبوضعية طولية، مرّة وحدة كل جلسة، بعد اختيار اللغة =====
-  // بوضعية عرضية (landscape) الموقع نسخة طبق الأصل عن الكمبيوتر (نفس الهيدر، نفس التقسيمات)،
-  // فلازم نشجّع المستخدم يلف الهاتف قبل ما يشوف المحتوى.
-  // بترجع فوراً (وبتعلّم الموقع "جاهز") إذا ما في داعي للنافذة؛ وإلا بتضل مفتوحة لحتى يلف
-  // المستخدم هاتفه أو يضغط "تمام" — وبس هيك بتعلّم الموقع "جاهز" (window.__markSiteReady).
-  const RP_T = {
-    ar:{ title:'لأفضل تجربة، اقلب هاتفك', sub:'الموقع مصمّم يتشاف أفقياً على الموبايل', ok:'تمام' },
-    en:{ title:'For the best experience, rotate your phone', sub:'This site is designed to be viewed in landscape on mobile', ok:'OK' },
-    tr:{ title:'En iyi deneyim için telefonunuzu çevirin', sub:'Bu site mobilde yatay görüntülenmek üzere tasarlandı', ok:'Tamam' },
-  };
-  function maybeShowRotatePrompt(){
-    const isMobile = matchMedia('(max-width:768px)').matches;
-    const isPortrait = matchMedia('(orientation:portrait)').matches;
-    let seen = false;
-    try{ seen = sessionStorage.getItem('rotateSeen') === '1'; }catch(e){}
-    if(!isMobile || !isPortrait || seen){ window.__markSiteReady(); return; }
-    try{ sessionStorage.setItem('rotateSeen','1'); }catch(e){}
-
-    const rt = RP_T[window.currentLang] || RP_T.ar;
-    const rp = document.createElement('div');
-    rp.id = 'rotate-prompt'; rp.className = 'vv-fixed';   // تعويض انزياح العناصر الثابتة (راجع index.html)
-    rp.innerHTML =
-      '<div class="rp-inner">'
-      + '<svg class="rp-icon" viewBox="0 0 120 120" aria-hidden="true">'
-      +   '<rect x="40" y="10" width="40" height="70" rx="7" fill="none" stroke="#c9975f" stroke-width="4"/>'
-      +   '<circle cx="60" cy="70" r="2.6" fill="#c9975f"/>'
-      +   '<path d="M86,40 A30,30 0 1 1 74,16" fill="none" stroke="#e0bb85" stroke-width="4" stroke-linecap="round"/>'
-      +   '<path d="M74,8 L74,18 L84,18 Z" fill="#e0bb85"/>'
-      + '</svg>'
-      + '<div class="rp-title">'+rt.title+'</div>'
-      + '<div class="rp-sub">'+rt.sub+'</div>'
-      + '<button class="rp-ok" type="button">'+rt.ok+'</button>'
-      + '</div>';
-    document.body.appendChild(rp);
-    requestAnimationFrame(()=> rp.classList.add('show'));
-
-    let done = false;
-    function dismiss(){
-      if(done) return; done = true;
-      rp.classList.remove('show');
-      setTimeout(()=> rp.remove(), 400);
-      removeEventListener('resize', checkOrient);
-      window.__markSiteReady();
-    }
-    function checkOrient(){ if(matchMedia('(orientation:landscape)').matches) dismiss(); }
-    rp.querySelector('.rp-ok').addEventListener('click', dismiss);
-    addEventListener('resize', checkOrient);
-  }
 
   // إذا المستخدم اختار لغة أصلاً هالجلسة (مثلاً بصفحة "من أنا") ورجع عالرئيسية بالضغط عالنافبار،
   // طبّقها فوراً بلا ما نطلعله بطاقة الاختيار من جديد. لكن لو حدّث/عمل ريفرش (F5) لنفس الصفحة،
@@ -233,7 +185,7 @@
   try{ savedLang = sessionStorage.getItem('lang'); }catch(e){}
   if(savedLang && T[savedLang] && !isReload){
     applyLang(savedLang);
-    maybeShowRotatePrompt();
+    window.__markSiteReady();
   } else {
     // ما في لغة محفوظة (أول زيارة أو ريفرش) — نطبّق العربي كافتراضي وقت ما البطاقة ظاهرة
     applyLang('ar');
@@ -249,7 +201,7 @@
       + '</div></div>';
     document.body.appendChild(splash);
     splash.querySelectorAll('.ls-card').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ applyLang(btn.dataset.lang); splash.classList.add('hide'); setTimeout(()=>splash.remove(),500); maybeShowRotatePrompt(); });
+      btn.addEventListener('click', ()=>{ applyLang(btn.dataset.lang); splash.classList.add('hide'); setTimeout(()=>splash.remove(),500); window.__markSiteReady(); });
     });
   }
 })();

@@ -143,23 +143,18 @@ body.lang-rtl .navlink{font-size:13.5px}
 .hw-glyphs text{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;
   fill:var(--bg);opacity:.4}
 
-/* ===== الصفحة: سكرول عادي، كل قسم شاشة كاملة عالأقل، مع تلاشي دخول/خروج ===== */
+/* ===== الصفحة: سكرول عادي، كل قسم شاشة كاملة عالأقل، مع تلاشي دخول/خروج خفيف (opacity بس، بلا transform
+   حتى ما يحتاج compositing إضافي — كان في نظام تلاشي أثقل لكل سطر لحاله، اتشال لأنه كان يسبّب لاغ محسوس) ===== */
 .page{
   position:relative;direction:ltr;min-height:56vh;
   display:flex;align-items:center;justify-content:flex-start;
   padding:30px clamp(28px,6vw,110px) 16px;
-  opacity:0;transform:translateY(24px);
-  transition:opacity .5s ease,transform .5s ease;
+  opacity:0;
+  transition:opacity .35s ease;
 }
-.page.in-view{opacity:1;transform:none}
+.page.in-view{opacity:1}
 /* المحتوى على اليسار (توسيط عمودي فقط) — متل ما كان */
 .panel{pointer-events:auto;text-align:left;max-width:560px;direction:rtl}
-
-/* تلاشي دخول/خروج تدريجي لكل سطر/عنصر داخل المحتوى — لحاله، مش مربوط بوصول القسم كامل
-   (يُحقن .reveal على أولاد .panel المباشرين بواسطة nav.js) */
-.reveal{opacity:0;transform:translateY(52px) scale(.97);
-  transition:opacity .75s cubic-bezier(.16,.84,.44,1),transform .75s cubic-bezier(.16,.84,.44,1)}
-.reveal.in-view{opacity:1;transform:none}
 
 /* ===== فيديو خلفية الهيرو (الرئيسية بس) — خفيف وشفاف، يتلاشى تحت الروبوت يميناً ===== */
 /* height ثابت (مش min-height) — الهيرو لازم يضل بالضبط شاشة وحدة. min-height كانت بتخلي align-items:center
@@ -429,21 +424,6 @@ body.lang-rtl .panel{direction:rtl}
 .ls-sub{font-size:12px;color:var(--muted)}
 @media (max-width:480px) and (orientation:portrait){ .ls-cards{gap:10px} .ls-card{width:44%;min-width:130px;padding:16px 10px} }
 
-/* ===== نافذة "اقلب هاتفك" — نفس أسلوب بطاقة اختيار اللغة ===== */
-#rotate-prompt{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:101;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(120% 120% at 50% 30%,#f6f1e4,#e9e0cc);
-  opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;cursor:default}
-#rotate-prompt.show{opacity:1;visibility:visible}
-.rp-inner{text-align:center;padding:24px;max-width:320px;animation:appear .6s ease-out both}
-.rp-icon{width:96px;height:96px;animation:rpTilt 1.8s ease-in-out infinite}
-@keyframes rpTilt{0%,100%{transform:rotate(0)}50%{transform:rotate(-90deg)}}
-.rp-title{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--text);
-  font-size:clamp(20px,5vw,26px);margin-top:18px}
-.rp-sub{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
-.rp-ok{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#05060f;cursor:pointer;
-  margin-top:26px;padding:12px 34px;border:0;border-radius:10px;
-  background:linear-gradient(120deg,#c9975f,#e0bb85);transition:transform .25s,box-shadow .25s}
-.rp-ok:hover{transform:translateY(-3px);box-shadow:0 12px 30px -6px #c9975f}
 
 
 /* ===== التواصل ===== */
